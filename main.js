@@ -17,8 +17,6 @@ var gs={
   y:0, // y position
   vs:0, // vertical speed
   hs:0, // horizontal speed
-  jump:false, // jumping
-  fall:false, // falling
   dir:0, //direction (-1=left, 0=none, 1=right)
 
   debug:false
