@@ -329,6 +329,12 @@ function init()
   gs.scanvas=document.getElementById("sprites");
   gs.sctx=gs.scanvas.getContext("2d");
 
+  gs.scanvas.onmousedown=function(e)
+  {
+    e = e || window.event;
+    settarget(e);
+  };
+
   window.addEventListener("resize", function() { playfieldsize(); });
 
   playfieldsize();
