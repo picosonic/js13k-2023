@@ -373,5 +373,9 @@ function settarget(e)
   console.log(e);
   var myx=Math.floor((e.clientX-e.target.getBoundingClientRect().left)/gs.scale);
   var myy=Math.floor((e.clientY-e.target.getBoundingClientRect().top)/gs.scale);
-  console.log(myx+", "+myy)
+  console.log(myx+", "+myy);
+
+  gs.path=pathfinder(
+    (Math.floor(gs.y/TILESIZE)*gs.width)+Math.floor(gs.x/TILESIZE), // Current pos
+    (Math.floor(myy/TILESIZE)*gs.width)+Math.floor(myx/TILESIZE));  // Clicked pos
 }
