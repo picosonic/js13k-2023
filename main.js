@@ -44,6 +44,8 @@ var gs={
   y:0, // y position
   vs:0, // vertical speed
   hs:0, // horizontal speed
+  tileid:99, // current player tile
+  flip:false, // if player is horizontally flipped
 
   // Level attributes
   level:0, // Level number (0 based)
@@ -70,7 +72,7 @@ var gs={
   particles:[], // an array of particles for explosion frage, footprint / jump dust
 
   // Game state
-  state:STATEINTRO, // state machine, 0=intro, 1=menu, 2=playing, 3=complete
+  state:STATEPLAYING, // state machine, 0=intro, 1=menu, 2=playing, 3=complete
 
   // Timeline for animation
   timeline:new timelineobj(),
@@ -150,16 +152,96 @@ function drawsprite(sprite)
       Math.floor(sprite.x)-gs.xoffset, Math.floor(sprite.y)-gs.yoffset, TILESIZE, TILESIZE);
 }
 
+// Load level
+function loadlevel(level)
+{
+  // Make sure it exists
+  if ((level>=0) && (levels.length-1<level)) return;
+
+  // Set current level to new one
+  gs.level=level;
+
+  // Deep copy tiles list to allow changes
+  gs.tiles=JSON.parse(JSON.stringify(levels[gs.level].tiles));
+
+  // Get width/height of new level
+  gs.width=parseInt(levels[gs.level].width, 10);
+  gs.height=parseInt(levels[gs.level].height, 10);
+
+  gs.chars=[];
+
+  // Populate chars (non solid tiles)
+  for (var y=0; y<gs.height; y++)
+  {
+    for (var x=0; x<gs.width; x++)
+    {
+      var tile=parseInt(levels[gs.level].chars[(y*gs.width)+x]||0, 10);
+
+      if (tile!=0)
+      {
+        var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), flip:false, hs:0, vs:0, del:false};
+
+        switch (tile-1)
+        {
+          case 99: // Player
+            gs.x=obj.x; // Set current position
+            gs.y=obj.y;
+
+            gs.sx=obj.x; // Set start position
+            gs.sy=obj.y;
+
+            gs.vs=0; // Start not moving
+            gs.hs=0;
+            break;
+
+          default:
+            gs.chars.push(obj); // Everything else
+            break;
+        }
+      }
+    }
+  }
+}
+
+// Draw level
+function drawlevel()
+{
+  for (var y=0; y<gs.height; y++)
+  {
+    for (var x=0; x<gs.width; x++)
+    {
+      var tile=parseInt(gs.tiles[(y*gs.width)+x]||1, 10);
+      drawtile(tile-1, x*TILESIZE, y*TILESIZE);
+    }
+  }
+}
+
+// Draw chars
+function drawchars()
+{
+  for (var id=0; id<gs.chars.length; id++)
+  {
+    drawsprite(gs.chars[id]);
+  }
+}
+
 // Redraw the game world
 function redraw()
 {
   // Clear the tile canvas
   gs.ctx.fillRect(0, 0, gs.canvas.width, gs.canvas.height);
 
-  drawtile(99, 0, 0);
+  // Draw the level
+  drawlevel();
 
   // Clear the sprites canvas
   gs.sctx.clearRect(0, 0, gs.scanvas.width, gs.scanvas.height);
+
+  // Draw the chars
+  drawchars();
+
+  // Draw the player
+  drawsprite({id:gs.tileid, x:gs.x, y:gs.y, flip:gs.flip});
 }
 
 function rafcallback(timestamp)
@@ -200,6 +282,20 @@ function rafcallback(timestamp)
   gs.lasttime=timestamp;
 
   window.requestAnimationFrame(rafcallback);
+}
+
+// New level
+function newlevel(level)
+{
+  if ((level<0) || (level>=levels.length))
+    return;
+
+    gs.level=level;
+
+    loadlevel(gs.level);
+
+    // Start frame callbacks
+    window.requestAnimationFrame(rafcallback);
 }
 
 // Entry point
@@ -253,8 +349,7 @@ function init()
     gs.tilemapflip=new Image;
     gs.tilemapflip.onload=function()
     {
-      // Start frame callbacks
-      window.requestAnimationFrame(rafcallback);
+      newlevel(0);
     };
     gs.tilemapflip.src=c.toDataURL();
   };
