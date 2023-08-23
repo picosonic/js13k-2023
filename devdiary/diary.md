@@ -106,3 +106,5 @@ Added loading and drawing of the test level.
 Fixed game state so that RAF keeps being called.
 
 Started work on mouse input, so that upon press, the position is calculated relative to the canvas. This is limited so that only the canvas fires these events, and the position will be relative to the grid of 16x16. Just need to take level X/Y offset into account for levels which are bigger than the level display area.
+
+Used pathfinder to determine way from current position to clicked position whilst avoiding solid objects.
