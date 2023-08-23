@@ -94,3 +94,15 @@ I reduced the canvas size to make the pixelated characters bigger, and made them
 The input handler has been split out into a separate JS lib.
 
 Tilemap has been added, just to have the image loaded, flipped and rendered in a RAF call.
+
+23rd August
+-----------
+Created and added a small test level, just to get familiar again with Tiled.
+
+Added code to the build/run script to detect changes to the level files and rebuild a levels.js file which is a minified representation of them.
+
+Added loading and drawing of the test level.
+
+Fixed game state so that RAF keeps being called.
+
+Started work on mouse input, so that upon press, the position is calculated relative to the canvas. This is limited so that only the canvas fires these events, and the position will be relative to the grid of 16x16. Just need to take level X/Y offset into account for levels which are bigger than the level display area.
