@@ -112,3 +112,9 @@ Used pathfinder to determine way from current position to clicked position whils
 24th August
 -----------
 Made the player character follow a path when set, so clicking anywhere on the map will set a target point, generate a path using A star pathfinder algorithm then as part of the frame updates the player will move towards the target.
+
+Combined tile maps for dungeon and town, need to optimise them and pick out just the tiles we actually need, to save space and improve colour map in lowest colours.
+
+Added scroll to player, but then quickly found the click position calculation wasn't taking the scroll into account so had to fix that.
+
+Added some more tiles to the test map just to see how it looks. Also added a default background colour.
