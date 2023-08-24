@@ -371,8 +371,8 @@ function settarget(e)
   // e.screenX/Y (screen relative)
   // e.layerX/Y (original element relative - scaled)
   //console.log(e);
-  var myx=Math.floor((e.clientX-e.target.getBoundingClientRect().left)/gs.scale);
-  var myy=Math.floor((e.clientY-e.target.getBoundingClientRect().top)/gs.scale);
+  var myx=Math.floor((e.clientX-e.target.getBoundingClientRect().left)/gs.scale)+gs.xoffset;
+  var myy=Math.floor((e.clientY-e.target.getBoundingClientRect().top)/gs.scale)+gs.yoffset;
   //console.log(myx+", "+myy);
 
   gs.path=pathfinder(
