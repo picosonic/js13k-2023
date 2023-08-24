@@ -19,7 +19,7 @@ zipfile="js13k.zip"
 buildpath="tmpbuild"
 jscat="${buildpath}/min.js"
 indexcat="${buildpath}/index.html"
-assetsrc="assets/tilemap_dungeon.png"
+assetsrc="assets/tilemap.png"
 assetjs="tilemap.js"
 leveljs="levels.js"
 
