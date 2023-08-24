@@ -46,6 +46,7 @@ var gs={
   hs:0, // horizontal speed
   tileid:99, // current player tile
   flip:false, // if player is horizontally flipped
+  path:[], // path player is following when moving
 
   // Level attributes
   level:0, // Level number (0 based)
@@ -152,6 +153,46 @@ function drawsprite(sprite)
       Math.floor(sprite.x)-gs.xoffset, Math.floor(sprite.y)-gs.yoffset, TILESIZE, TILESIZE);
 }
 
+// Move characters around
+function updateMovements()
+{
+  // Move main character if a path is set
+  if (gs.path.length>0)
+  {
+    var nextx=Math.floor(gs.path[0]%gs.width)*TILESIZE;
+    var nexty=Math.floor(gs.path[0]/gs.width)*TILESIZE;
+    var deltax=Math.abs(nextx-gs.x);
+    var deltay=Math.abs(nexty-gs.y);
+
+    // Check if we have arrived at the current path node
+    if ((deltax<=(TILESIZE/2)) && (deltay<=(TILESIZE/2)))
+    {
+      // We are here, so move on to next path node
+      gs.path.shift();
+    }
+    else
+    {
+      // Move onwards, following path
+      if (deltax!=0)
+      {
+        gs.hs=(nextx<gs.x)?-2:2;
+        gs.x+=gs.hs;
+
+        if (gs.x<0)
+          gs.x=0;
+      }
+
+      if (deltay!=0)
+      {
+        gs.y+=(nexty<gs.y)?-2:2;
+
+        if (gs.y<0)
+          gs.y=0;
+      }
+    }
+  }
+}
+
 // Load level
 function loadlevel(level)
 {
@@ -192,6 +233,8 @@ function loadlevel(level)
 
             gs.vs=0; // Start not moving
             gs.hs=0;
+
+            gs.path=[]; // Clear any path being followed
             break;
 
           default:
@@ -244,6 +287,12 @@ function redraw()
   drawsprite({id:gs.tileid, x:gs.x, y:gs.y, flip:gs.flip});
 }
 
+// Run an update step to the game state
+function update()
+{
+  updateMovements();
+}
+
 function rafcallback(timestamp)
 {
   // First time round, just save epoch
@@ -267,7 +316,7 @@ function rafcallback(timestamp)
     // Process "steps" since last call
     while (gs.acc>gs.step)
     {
-      //update();
+      update();
       gs.acc-=gs.step;
     }
 
