@@ -5,6 +5,7 @@ const XMAX=320;
 const YMAX=180;
 const TILESIZE=16;
 const TILESPERROW=12;
+const BGCOLOUR="#57d66b";
 
 const STATEINTRO=0;
 const STATEMENU=1;
@@ -156,6 +157,8 @@ function drawsprite(sprite)
 // Move characters around
 function updateMovements()
 {
+  var speed=2;
+
   // Move main character if a path is set
   if (gs.path.length>0)
   {
@@ -165,7 +168,7 @@ function updateMovements()
     var deltay=Math.abs(nexty-gs.y);
 
     // Check if we have arrived at the current path node
-    if ((deltax<=(TILESIZE/2)) && (deltay<=(TILESIZE/2)))
+    if ((deltax==0) && (deltay==0))
     {
       // We are here, so move on to next path node
       gs.path.shift();
@@ -175,7 +178,7 @@ function updateMovements()
       // Move onwards, following path
       if (deltax!=0)
       {
-        gs.hs=(nextx<gs.x)?-2:2;
+        gs.hs=(nextx<gs.x)?-speed:speed;
         gs.x+=gs.hs;
 
         if (gs.x<0)
@@ -184,7 +187,7 @@ function updateMovements()
 
       if (deltay!=0)
       {
-        gs.y+=(nexty<gs.y)?-2:2;
+        gs.y+=(nexty<gs.y)?-speed:speed;
 
         if (gs.y<0)
           gs.y=0;
@@ -268,10 +271,63 @@ function drawchars()
   }
 }
 
+// Scroll level to player
+function scrolltoplayer(dampened)
+{
+  var xmiddle=Math.floor((XMAX-TILESIZE)/2);
+  var ymiddle=Math.floor((YMAX-TILESIZE)/2);
+  var maxxoffs=((gs.width*TILESIZE)-XMAX);
+  var maxyoffs=((gs.height*TILESIZE)-YMAX);
+
+  // Work out where x and y offsets should be
+  var newxoffs=gs.x-xmiddle;
+  var newyoffs=gs.y-ymiddle;
+
+  if (newxoffs>maxxoffs) newxoffs=maxxoffs;
+  if (newyoffs>maxyoffs) newyoffs=maxyoffs;
+
+  if (newxoffs<0) newxoffs=0;
+  if (newyoffs<0) newyoffs=0;
+
+  // Determine if xoffset should be changed
+  if (newxoffs!=gs.xoffset)
+  {
+    if (dampened)
+    {
+      var xdelta=1;
+
+      if (Math.abs(gs.xoffset-newxoffs)>(XMAX/5)) xdelta=4;
+
+      gs.xoffset+=newxoffs>gs.xoffset?xdelta:-xdelta;
+    }
+    else
+      gs.xoffset=newxoffs;
+  }
+
+  // Determine if xoffset should be changed
+  if (newyoffs!=gs.yoffset)
+  {
+    if (dampened)
+    {
+      var ydelta=1;
+
+      if (Math.abs(gs.yoffset-newyoffs)>(YMAX/5)) ydelta=4;
+
+      gs.yoffset+=newyoffs>gs.yoffset?ydelta:-ydelta;
+    }
+    else
+      gs.yoffset=newyoffs;
+  }
+}
+
 // Redraw the game world
 function redraw()
 {
+  // Scroll to keep player in view
+  scrolltoplayer(true);
+
   // Clear the tile canvas
+  gs.ctx.fillStyle=BGCOLOUR;
   gs.ctx.fillRect(0, 0, gs.canvas.width, gs.canvas.height);
 
   // Draw the level
