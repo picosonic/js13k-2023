@@ -108,3 +108,7 @@ Fixed game state so that RAF keeps being called.
 Started work on mouse input, so that upon press, the position is calculated relative to the canvas. This is limited so that only the canvas fires these events, and the position will be relative to the grid of 16x16. Just need to take level X/Y offset into account for levels which are bigger than the level display area.
 
 Used pathfinder to determine way from current position to clicked position whilst avoiding solid objects.
+
+24th August
+-----------
+Made the player character follow a path when set, so clicking anywhere on the map will set a target point, generate a path using A star pathfinder algorithm then as part of the frame updates the player will move towards the target.
