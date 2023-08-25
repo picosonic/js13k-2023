@@ -13,13 +13,6 @@ const STATEPLAYING=2;
 const STATENEWLEVEL=3;
 const STATECOMPLETE=4;
 
-const KEYNONE=0;
-const KEYLEFT=1;
-const KEYUP=2;
-const KEYRIGHT=4;
-const KEYDOWN=8;
-const KEYACTION=16;
-
 // Game state
 var gs={
   // animation frame of reference
@@ -55,13 +48,6 @@ var gs={
   height:0, // height in tiles
   xoffset:0, // current view offset from left (horizontal scroll)
   yoffset:0, // current view offset from top (vertical scroll)
-
-  // Input
-  keystate:KEYNONE,
-  padstate:KEYNONE,
-  gamepadbuttons:[], // Button mapping
-  gamepadaxes:[], // Axes mapping
-  gamepadaxesval:[], // Axes values
 
   // Tiles
   tiles:[], // copy of current level (to allow destruction)
@@ -361,14 +347,6 @@ function rafcallback(timestamp)
     if ((gs.acc>gs.step) && ((gs.acc/gs.step)>(60*15)))
       gs.acc=gs.step*2;
 
-    // Gamepad support
-    try
-    {
-      if (!!(navigator.getGamepads))
-        gamepadscan();
-    }
-    catch(e){}
-
     // Process "steps" since last call
     while (gs.acc>gs.step)
     {
@@ -410,13 +388,7 @@ function init()
   document.onkeydown=function(e)
   {
     e = e || window.event;
-    updatekeystate(e, 1);
-  };
-
-  document.onkeyup=function(e)
-  {
-    e = e || window.event;
-    updatekeystate(e, 0);
+    e.preventDefault();
   };
 
   // Stop things from being dragged around
