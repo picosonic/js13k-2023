@@ -143,7 +143,7 @@ function drawsprite(sprite)
 // Move characters around
 function updateMovements()
 {
-  var speed=2;
+  var speed=1;
 
   // Move main character if a path is set
   if (gs.path.length>0)
@@ -164,7 +164,8 @@ function updateMovements()
       // Move onwards, following path
       if (deltax!=0)
       {
-        gs.hs=(nextx<gs.x)?-speed:speed;
+        gs.flip=(nextx<gs.x);
+        gs.hs=gs.flip?-speed:speed;
         gs.x+=gs.hs;
 
         if (gs.x<0)
@@ -222,6 +223,7 @@ function loadlevel(level)
 
             gs.vs=0; // Start not moving
             gs.hs=0;
+            gs.flip=false;
 
             gs.path=[]; // Clear any path being followed
             break;
