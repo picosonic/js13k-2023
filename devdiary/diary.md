@@ -124,3 +124,13 @@ Added some more tiles to the test map just to see how it looks. Also added a def
 Added loads more tiles and characters to test level to see how they look. This will also be useful for adding AI to see how they move, and collision detection.
 
 Removed gamepad and keyboard support since this will be a click/touch game instead, there is no need for other input methods at this stage.
+
+Added horizontal flip when character is travelling left/right.
+
+Added a mouse cursor when over the game world canvas. Then spent ages stopping it showing when touchscreen is detected.
+
+Created some issues on github which would be suitable for a good first issue for Steph and Cat to look at.
+
+Also tested the Google closure output to make sure it works.
+
+The current used space out of the 13kb is 90% - most of this is taken up with the huge spritesheet. So the next major task will be to cull it down to size by deciding what will actually be used in the game. This needs to be done before the maps are made otherwise the ids will all change.
