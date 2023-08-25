@@ -426,8 +426,12 @@ function init()
   // Mouse pointer events
   window.addEventListener("mousemove", (e) => { pointerpos(e); } );
   window.addEventListener("mouseout", function() { gs.cursor=false; });
+
+  // Touchscreen events
   window.addEventListener("touchstart", function() { gs.cursor=false; });
   window.addEventListener("touchend", function() { gs.cursor=false; });
+  window.addEventListener("touchcancel", function() { gs.cursor=false; });
+  window.addEventListener("touchmove", function() { gs.cursor=false; });
 
   window.addEventListener("resize", function() { playfieldsize(); });
 
