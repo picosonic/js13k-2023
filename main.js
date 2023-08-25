@@ -426,6 +426,8 @@ function init()
   // Mouse pointer events
   window.addEventListener("mousemove", (e) => { pointerpos(e); } );
   window.addEventListener("mouseout", function() { gs.cursor=false; });
+  window.addEventListener("touchstart", function() { gs.cursor=false; });
+  window.addEventListener("touchend", function() { gs.cursor=false; });
 
   window.addEventListener("resize", function() { playfieldsize(); });
 
