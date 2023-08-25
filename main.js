@@ -33,7 +33,7 @@ var gs={
   cursor:false, // Should cursor be shown
   cursorx:0, // x position of cursor
   cursory:0, // y position of cursor
-  touch:0, // Touchscreen counter
+  touch:false, // touchscreen - hide mouse
 
   // Tilemap image
   tilemap:null,
@@ -339,10 +339,8 @@ function redraw()
   // Draw the cursor
   if (gs.cursor)
   {
-    if (gs.touch==0)
+    if (!gs.touch)
       drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
-    else
-      gs.touch--;
   }
 }
 
@@ -434,10 +432,10 @@ function init()
   window.addEventListener("mouseout", function() { gs.cursor=false; });
 
   // Touchscreen events
-  window.addEventListener("touchstart", function() { gs.touch=1; });
-  window.addEventListener("touchend", function() { gs.touch=1; });
-  window.addEventListener("touchcancel", function() { gs.touch=1; });
-  window.addEventListener("touchmove", function() { gs.touch=1; });
+  window.addEventListener("touchstart", function() { gs.touch=true; });
+  window.addEventListener("touchend", function() { gs.touch=true; });
+  window.addEventListener("touchcancel", function() { gs.touch=true; });
+  window.addEventListener("touchmove", function() { gs.touch=true; });
 
   window.addEventListener("resize", function() { playfieldsize(); });
 
