@@ -33,6 +33,7 @@ var gs={
   cursor:false, // Should cursor be shown
   cursorx:0, // x position of cursor
   cursory:0, // y position of cursor
+  touch:0, // Touchscreen counter
 
   // Tilemap image
   tilemap:null,
@@ -337,7 +338,12 @@ function redraw()
 
   // Draw the cursor
   if (gs.cursor)
-    drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
+  {
+    if (gs.touch==0)
+      drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
+    else
+      gs.touch--;
+  }
 }
 
 // Run an update step to the game state
@@ -428,10 +434,10 @@ function init()
   window.addEventListener("mouseout", function() { gs.cursor=false; });
 
   // Touchscreen events
-  window.addEventListener("touchstart", function() { gs.cursor=false; });
-  window.addEventListener("touchend", function() { gs.cursor=false; });
-  window.addEventListener("touchcancel", function() { gs.cursor=false; });
-  window.addEventListener("touchmove", function() { gs.cursor=false; });
+  window.addEventListener("touchstart", function() { gs.touch=1; });
+  window.addEventListener("touchend", function() { gs.touch=1; });
+  window.addEventListener("touchcancel", function() { gs.touch=1; });
+  window.addEventListener("touchmove", function() { gs.touch=1; });
 
   window.addEventListener("resize", function() { playfieldsize(); });
 
