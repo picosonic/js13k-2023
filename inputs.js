@@ -29,7 +29,9 @@ function pointerpos(e)
   {
     gs.cursorx=e.offsetX-(TILESIZE/2);
     gs.cursory=e.offsetY-(TILESIZE/2);
-    gs.cursor=true;
+  
+    if (!gs.touch)
+      gs.cursor=true;
   }
   else
     gs.cursor=false;
