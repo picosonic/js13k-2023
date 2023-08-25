@@ -21,3 +21,16 @@ function settarget(e)
     (Math.floor(gs.y/TILESIZE)*gs.width)+Math.floor(gs.x/TILESIZE), // Current pos
     (Math.floor(myy/TILESIZE)*gs.width)+Math.floor(myx/TILESIZE));  // Clicked pos
 }
+
+// Move the pointer position
+function pointerpos(e)
+{
+  if (e.target==gs.scanvas)
+  {
+    gs.cursorx=e.offsetX-(TILESIZE/2);
+    gs.cursory=e.offsetY-(TILESIZE/2);
+    gs.cursor=true;
+  }
+  else
+    gs.cursor=false;
+}

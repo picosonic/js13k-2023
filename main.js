@@ -5,7 +5,7 @@ const XMAX=320;
 const YMAX=180;
 const TILESIZE=16;
 const TILESPERROW=12;
-const BGCOLOUR="#57d66b";
+const BGCOLOUR="#80c668";
 
 const STATEINTRO=0;
 const STATEMENU=1;
@@ -28,6 +28,11 @@ var gs={
   scanvas:null, // Sprites
   sctx:null,
   scale:1, // Changes when resizing window
+
+  // Cursor
+  cursor:false, // Should cursor be shown
+  cursorx:0, // x position of cursor
+  cursory:0, // y position of cursor
 
   // Tilemap image
   tilemap:null,
@@ -328,7 +333,11 @@ function redraw()
   drawchars();
 
   // Draw the player
-  drawsprite({id:gs.tileid, x:gs.x, y:gs.y, flip:gs.flip});
+  drawsprite({id:gs.tileid, x:gs.x, y:gs.y+((gs.x%TILESIZE)==8?1:0), flip:gs.flip});
+
+  // Draw the cursor
+  if (gs.cursor)
+    drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
 }
 
 // Run an update step to the game state
@@ -413,6 +422,10 @@ function init()
     e = e || window.event;
     settarget(e);
   };
+
+  // Mouse pointer events
+  window.addEventListener("mousemove", (e) => { pointerpos(e); } );
+  window.addEventListener("mouseout", function() { gs.cursor=false; });
 
   window.addEventListener("resize", function() { playfieldsize(); });
 
