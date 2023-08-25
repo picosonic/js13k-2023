@@ -118,3 +118,9 @@ Combined tile maps for dungeon and town, need to optimise them and pick out just
 Added scroll to player, but then quickly found the click position calculation wasn't taking the scroll into account so had to fix that.
 
 Added some more tiles to the test map just to see how it looks. Also added a default background colour.
+
+25th August
+-----------
+Added loads more tiles and characters to test level to see how they look. This will also be useful for adding AI to see how they move, and collision detection.
+
+Removed gamepad and keyboard support since this will be a click/touch game instead, there is no need for other input methods at this stage.
