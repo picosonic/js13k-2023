@@ -337,11 +337,8 @@ function redraw()
   drawsprite({id:gs.tileid, x:gs.x, y:gs.y+((gs.x%TILESIZE)==8?1:0), flip:gs.flip});
 
   // Draw the cursor
-  if (gs.cursor)
-  {
-    if (!gs.touch)
-      drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
-  }
+  if ((gs.cursor) && (!gs.touch))
+    drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
 }
 
 // Run an update step to the game state
