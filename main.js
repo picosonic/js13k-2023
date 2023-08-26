@@ -14,6 +14,7 @@ const STATENEWLEVEL=3;
 const STATECOMPLETE=4;
 
 // Tile ids
+const TILE_COIN=93;
 const TILE_CURSOR=132;
 const TILE_PLAYER=143;
 
@@ -225,7 +226,7 @@ function particlecheck()
   }
 }
 
-// Move characters around
+// Move character around
 function updateMovements()
 {
   var speed=1;
@@ -428,10 +429,74 @@ function redraw()
     drawsprite({id:TILE_CURSOR, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
 }
 
+// Check if area a overlaps with area b
+function overlap(ax, ay, aw, ah, bx, by, bw, bh)
+{
+  // Check horizontally
+  if ((ax<bx) && ((ax+aw))<=bx) return false; // a too far left of b
+  if ((ax>bx) && ((bx+bw))<=ax) return false; // a too far right of b
+
+  // Check vertically
+  if ((ay<by) && ((ay+ah))<=by) return false; // a too far above b
+  if ((ay>by) && ((by+bh))<=ay) return false; // a too far below b
+
+  return true;
+}
+
+// Collision check with player hitbox
+function checkcollide()
+{
+  // Generate player hitbox
+  var px=gs.x+(TILESIZE/3);
+  var py=gs.y+((TILESIZE/5)*2);
+  var pw=(TILESIZE/3);
+  var ph=(TILESIZE/5)*3;
+  var id=0;
+
+  // Iterate over all chars on the map
+  for (id=0; id<gs.chars.length; id++)
+  {
+    // Check for collision with this char
+    if (overlap(px, py, pw, ph, gs.chars[id].x, gs.chars[id].y, TILESIZE, TILESIZE))
+    {
+      switch (gs.chars[id].id)
+      {
+        case TILE_COIN:
+          gs.chars[id].del=true; // Remove coin from map
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+}
+
+// Update movement and logic of characters
+function updatecharAI()
+{
+  var id=0;
+
+  // Remove anything marked for deletion
+  id=gs.chars.length;
+  while (id--)
+  {
+    if (gs.chars[id].del)
+      gs.chars.splice(id, 1);
+  }
+}
+
 // Run an update step to the game state
 function update()
 {
+  // Move player
   updateMovements();
+
+  // Update the AI of all the characters
+  updatecharAI();
+
+  // Check for player collision
+  checkcollide();
 }
 
 function rafcallback(timestamp)
