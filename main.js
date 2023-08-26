@@ -5,13 +5,17 @@ const XMAX=320;
 const YMAX=180;
 const TILESIZE=16;
 const TILESPERROW=12;
-const BGCOLOUR="#80c668";
+const BGCOLOUR="#80c768";
 
 const STATEINTRO=0;
 const STATEMENU=1;
 const STATEPLAYING=2;
 const STATENEWLEVEL=3;
 const STATECOMPLETE=4;
+
+// Tile ids
+const TILE_CURSOR=132;
+const TILE_PLAYER=143;
 
 // Game state
 var gs={
@@ -44,7 +48,7 @@ var gs={
   y:0, // y position
   vs:0, // vertical speed
   hs:0, // horizontal speed
-  tileid:99, // current player tile
+  tileid:TILE_PLAYER, // current player tile
   flip:false, // if player is horizontally flipped
   path:[], // path player is following when moving
 
@@ -220,7 +224,7 @@ function loadlevel(level)
 
         switch (tile-1)
         {
-          case 99: // Player
+          case TILE_PLAYER: // Player
             gs.x=obj.x; // Set current position
             gs.y=obj.y;
 
@@ -338,7 +342,7 @@ function redraw()
 
   // Draw the cursor
   if ((gs.cursor) && (!gs.touch))
-    drawsprite({id:60, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
+    drawsprite({id:TILE_CURSOR, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
 }
 
 // Run an update step to the game state
