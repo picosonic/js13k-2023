@@ -134,3 +134,13 @@ Created some issues on github which would be suitable for a good first issue for
 Also tested the Google closure output to make sure it works.
 
 The current used space out of the 13kb is 90% - most of this is taken up with the huge spritesheet. So the next major task will be to cull it down to size by deciding what will actually be used in the game. This needs to be done before the maps are made otherwise the ids will all change.
+
+26th August
+-----------
+Reduced tilemap to much smaller set, starting with village and adding people, enemies, potions, treasure chest and a few other bits. Now back down to a more manageable 65%.
+
+Added 8-bit font and text writer library that I've used previously.
+
+Added particle system, which may need tweaking since this is a top down game and gravity won't apply in the same way.
+
+Added collision detection, started with ability to collect coins.
