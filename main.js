@@ -26,6 +26,11 @@ var gs={
   fps:0, // current FPS
   frametimes:[], // array of frame times
 
+  // physics in pixels per frame @ 60fps
+  gravity:0.05,
+  terminalvelocity:10,
+  friction:1,
+
   // Canvas
   canvas:null, // Tiles
   ctx:null,
@@ -78,6 +83,12 @@ var gs={
   // Debug flag
   debug:false
 };
+
+// Random number generator
+function rng()
+{
+  return Math.random();
+}
 
 // Handle resize events
 function playfieldsize()
@@ -150,6 +161,70 @@ function drawsprite(sprite)
       Math.floor(sprite.x)-gs.xoffset, Math.floor(sprite.y)-gs.yoffset, TILESIZE, TILESIZE);
 }
 
+// Draw single particle
+function drawparticle(particle)
+{
+  var x=particle.x+(particle.t*Math.cos(particle.ang));
+  var y=particle.y+(particle.t*Math.sin(particle.ang));
+
+  // Clip to what's visible
+    if (((Math.floor(x)-gs.xoffset)<0) && // clip left
+    ((Math.floor(x)-gs.xoffset)>XMAX) && // clip right
+    ((Math.floor(y)-gs.yoffset)<0) && // clip top
+    ((Math.floor(y)-gs.yoffset)>YMAX))   // clip bottom
+  return;
+
+  gs.sctx.fillStyle="rgba("+particle.r+","+particle.g+","+particle.b+","+particle.a+")";
+  gs.sctx.fillRect(Math.floor(x)-gs.xoffset, Math.floor(y)-gs.yoffset, particle.s, particle.s);
+}
+
+// Draw particles
+function drawparticles()
+{
+  for (var i=0; i<gs.particles.length; i++)
+    drawparticle(gs.particles[i]);
+}
+
+// Generate some particles around an origin
+function generateparticles(cx, cy, mt, count, rgb)
+{
+  for (var i=0; i<count; i++)
+  {
+    var ang=(Math.floor(rng()*360)); // angle to eminate from
+    var t=Math.floor(rng()*mt); // travel from centre
+    var r=rgb.r||(rng()*255);
+    var g=rgb.g||(rng()*255);
+    var b=rgb.b||(rng()*255);
+
+    gs.particles.push({x:cx, y:cy, ang:ang, t:t, r:r, g:g, b:b, a:1.0, s:(rng()<0.05)?2:1});
+  }
+}
+
+// Do processing for particles
+function particlecheck()
+{
+  var i=0;
+
+  // Process particles
+  for (i=0; i<gs.particles.length; i++)
+  {
+    // Move particle
+    gs.particles[i].t+=0.5;
+    gs.particles[i].y+=(gs.gravity*2);
+
+    // Decay particle
+    gs.particles[i].a-=0.007;
+  }
+
+  // Remove particles which have decayed
+  i=gs.particles.length;
+  while (i--)
+  {
+    if (gs.particles[i].a<=0)
+      gs.particles.splice(i, 1);
+  }
+}
+
 // Move characters around
 function updateMovements()
 {
@@ -168,6 +243,9 @@ function updateMovements()
     {
       // We are here, so move on to next path node
       gs.path.shift();
+
+      // Generate some "dust" as we move
+      generateparticles(gs.x+(TILESIZE/2), gs.y+TILESIZE, 1, 1, {r:1, g:170, b:1});
     }
     else
     {
@@ -191,6 +269,9 @@ function updateMovements()
       }
     }
   }
+
+  // Check for particle usage
+  particlecheck();
 }
 
 // Load level
@@ -236,6 +317,7 @@ function loadlevel(level)
             gs.flip=false;
 
             gs.path=[]; // Clear any path being followed
+            gs.particles=[]; // Clear any leftover particles
             break;
 
           default:
@@ -264,9 +346,7 @@ function drawlevel()
 function drawchars()
 {
   for (var id=0; id<gs.chars.length; id++)
-  {
     drawsprite(gs.chars[id]);
-  }
 }
 
 // Scroll level to player
@@ -339,6 +419,9 @@ function redraw()
 
   // Draw the player
   drawsprite({id:gs.tileid, x:gs.x, y:gs.y+((gs.x%TILESIZE)==8?1:0), flip:gs.flip});
+
+  // Draw the particles
+  drawparticles();
 
   // Draw the cursor
   if ((gs.cursor) && (!gs.touch))
