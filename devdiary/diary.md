@@ -144,3 +144,13 @@ Added 8-bit font and text writer library that I've used previously.
 Added particle system, which may need tweaking since this is a top down game and gravity won't apply in the same way.
 
 Added collision detection, started with ability to collect coins.
+
+27th August
+-----------
+Updated level to add some game features, locations and potential tasks.
+
+Added some tile ids for use in game logic.
+
+Made doors in buildings chars so that you can click them as targets and then go inside them.
+
+Now I've got a level which is looking a bit like a game, next stage is to make more things collectable and make other characters move.
