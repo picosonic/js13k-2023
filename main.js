@@ -510,31 +510,34 @@ function checkcollide()
         case TILE_DOOR6:
         case TILE_DOOR7:
         case TILE_DOOR8:
-          if (gs.level==0)
+          if (gs.path.length==0)
           {
-            // Remember where we were
-            gs.doorx=gs.x;
-            gs.doory=gs.y;
+            if (gs.level==0)
+            {
+              // Remember where we were
+              gs.doorx=gs.x;
+              gs.doory=gs.y;
 
-            // Load the level corresponding to this door
-            loadlevel(1);
+              // Load the level corresponding to this door
+              loadlevel(1);
 
-            // Quickly get player in view
-            scrolltoplayer(false);
+              // Quickly get player in view
+              scrolltoplayer(false);
+            }
+            else
+            {
+              // Got back to main level
+              loadlevel(0);
+
+              // Reset player position to below door
+              gs.x=gs.doorx;
+              gs.y=gs.doory+TILESIZE;
+
+              // Quickly get player in view
+              scrolltoplayer(false);
+            }
+            break;
           }
-          else
-          {
-            // Got back to main level
-            loadlevel(0);
-
-            // Reset player position to below door
-            gs.x=gs.doorx;
-            gs.y=gs.doory+(TILESIZE/2);
-
-            // Quickly get player in view
-            scrolltoplayer(false);
-          }
-          break;
 
         default:
           break;
