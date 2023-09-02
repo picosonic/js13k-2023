@@ -502,6 +502,40 @@ function checkcollide()
           gs.chars[id].del=true; // Remove coin from map
           break;
 
+        case TILE_DOOR1:
+        case TILE_DOOR2:
+        case TILE_DOOR3:
+        case TILE_DOOR4:
+        case TILE_DOOR5:
+        case TILE_DOOR6:
+        case TILE_DOOR7:
+        case TILE_DOOR8:
+          if (gs.level==0)
+          {
+            // Remember where we were
+            gs.doorx=gs.x;
+            gs.doory=gs.y;
+
+            // Load the level corresponding to this door
+            loadlevel(1);
+
+            // Quickly get player in view
+            scrolltoplayer(false);
+          }
+          else
+          {
+            // Got back to main level
+            loadlevel(0);
+
+            // Reset player position to below door
+            gs.x=gs.doorx;
+            gs.y=gs.doory+(TILESIZE/2);
+
+            // Quickly get player in view
+            scrolltoplayer(false);
+          }
+          break;
+
         default:
           break;
       }
