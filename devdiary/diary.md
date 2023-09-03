@@ -154,3 +154,15 @@ Added some tile ids for use in game logic.
 Made doors in buildings chars so that you can click them as targets and then go inside them.
 
 Now I've got a level which is looking a bit like a game, next stage is to make more things collectable and make other characters move.
+
+2nd September
+-------------
+Fixed a treasure chest which couldn't be opened, by moving it from tiles to chars.
+
+Added a small test room which can be entered when using a door on the main level. Then when clicking on the door in the test room, the player goes back to the main level beneath the door that was entered.
+
+3rd September
+-------------
+Found out mini rooms could be escaped from if you click outside the room since exit from room action only happens when it's the end of a followed path (i.e. the door is clicked on). Fixed by adding an invisible solid block just outside the door.
+
+Added custom level property for doorname, which corresponds to the x,y location of where the door is located so that each door goes to a different room.
