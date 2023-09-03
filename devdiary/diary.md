@@ -166,3 +166,5 @@ Added a small test room which can be entered when using a door on the main level
 Found out mini rooms could be escaped from if you click outside the room since exit from room action only happens when it's the end of a followed path (i.e. the door is clicked on). Fixed by adding an invisible solid block just outside the door.
 
 Added custom level property for doorname, which corresponds to the x,y location of where the door is located so that each door goes to a different room.
+
+Added some more inside rooms for buildings, so now we have a Beekeeper's House, Blacksmith's house and Wizard's House.
