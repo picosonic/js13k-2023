@@ -519,7 +519,15 @@ function checkcollide()
               gs.doory=gs.y;
 
               // Load the level corresponding to this door
-              loadlevel(1);
+              var doorname=""+Math.floor(gs.x/TILESIZE)+","+Math.floor(gs.y/TILESIZE);
+              for (var doorlevel=0; doorlevel<levels.length; doorlevel++)
+              {
+                if (levels[doorlevel].door==doorname)
+                {
+                  loadlevel(doorlevel);
+                  break;
+                }
+              }
 
               // Quickly get player in view
               scrolltoplayer(false);

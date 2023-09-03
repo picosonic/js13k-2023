@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
  <properties>
-  <property name="title" value="Level 1"/>
+  <property name="door" value="5,3"/>
+  <property name="title" value="Blacksmith's house"/>
  </properties>
  <tileset firstgid="1" source="tilemap.tsx"/>
  <layer id="1" name="tiles" width="20" height="11">

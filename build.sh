@@ -55,7 +55,7 @@ then
       echo -n ',' >> "${leveljs}"
     done
 
-    for property in "title"
+    for property in "title" "door"
     do
       echo -n "${property}:\"" >> "${leveljs}"
       cat "${file}" | grep "<property " | grep 'name=\"'${property}'\"' | awk -F'"' '{ print $4 }' | tr -d '\n' >> "${leveljs}"
