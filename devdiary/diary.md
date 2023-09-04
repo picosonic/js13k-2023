@@ -168,3 +168,12 @@ Found out mini rooms could be escaped from if you click outside the room since e
 Added custom level property for doorname, which corresponds to the x,y location of where the door is located so that each door goes to a different room.
 
 Added some more inside rooms for buildings, so now we have a Beekeeper's House, Blacksmith's house and Wizard's House.
+
+4th September
+-------------
+Some of the changes I'd made to levels missed being commited.
+
+Allow treasure chests to be opened, they all reveal coins for now.
+But spawning in the same place as the chest didn't work because the player character was also occupying that space and promptly collected the coin because they were overlapping it already meaning it was never seen. So decided to spawn below the chest.
+
+Then fixed issue where treasure could be spawned somewhere inaccessible. When the area below the chest was solid or unreachable the coin could not be collected. Now it checks for the location below being empty and spawns above the chest if it can't spawn below.
