@@ -96,7 +96,7 @@ var gs={
   path:[], // path player is following when moving
 
   // Level attributes
-  level:0, // Level number (0 based)
+  level:-1, // Level number (0 based)
   width:0, // Width in tiles
   height:0, // height in tiles
   xoffset:0, // current view offset from left (horizontal scroll)
@@ -318,6 +318,10 @@ function loadlevel(level)
   // Make sure it exists
   if ((level>=0) && (levels.length-1<level)) return;
 
+  // Save current level back to maintain state
+  if (gs.level!=-1)
+    levels[gs.level].chars=JSON.parse(JSON.stringify(gs.chars));
+
   // Set current level to new one
   gs.level=level;
 
@@ -328,43 +332,57 @@ function loadlevel(level)
   gs.width=parseInt(levels[gs.level].width, 10);
   gs.height=parseInt(levels[gs.level].height, 10);
 
-  gs.chars=[];
-
   // Populate chars (non solid tiles)
-  for (var y=0; y<gs.height; y++)
+  if (levels[gs.level].minified==undefined)
   {
-    for (var x=0; x<gs.width; x++)
+    gs.chars=[];
+
+    for (var y=0; y<gs.height; y++)
     {
-      var tile=parseInt(levels[gs.level].chars[(y*gs.width)+x]||0, 10);
-
-      if (tile!=0)
+      for (var x=0; x<gs.width; x++)
       {
-        var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), flip:false, hs:0, vs:0, del:false};
+        var tile=parseInt(levels[gs.level].chars[(y*gs.width)+x]||0, 10);
 
-        switch (tile-1)
+        if (tile!=0)
         {
-          case TILE_PLAYER: // Player
-            gs.x=obj.x; // Set current position
-            gs.y=obj.y;
+          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), flip:false, hs:0, vs:0, del:false};
 
-            gs.sx=obj.x; // Set start position
-            gs.sy=obj.y;
+          switch (tile-1)
+          {
+            case TILE_PLAYER: // Player
+              gs.x=obj.x; // Set current position
+              gs.y=obj.y;
 
-            gs.vs=0; // Start not moving
-            gs.hs=0;
-            gs.flip=false;
+              levels[gs.level].sx=obj.x; // Set start position
+              levels[gs.level].sy=obj.y;
 
-            gs.path=[]; // Clear any path being followed
-            gs.particles=[]; // Clear any leftover particles
-            break;
+              gs.vs=0; // Start not moving
+              gs.hs=0;
+              gs.flip=false;
+              break;
 
-          default:
-            gs.chars.push(obj); // Everything else
-            break;
+            default:
+              gs.chars.push(obj); // Everything else
+              break;
+          }
         }
       }
     }
+
+    levels[gs.level].minified=true;
   }
+  else
+  {
+    // Use cached copy of modified level
+    gs.chars=levels[gs.level].chars;
+
+    // Set up player
+    gs.x=levels[gs.level].sx;
+    gs.y=levels[gs.level].sy;
+  }
+
+  gs.path=[]; // Clear any path being followed
+  gs.particles=[]; // Clear any leftover particles
 }
 
 // Draw level
@@ -641,9 +659,7 @@ function newlevel(level)
   if ((level<0) || (level>=levels.length))
     return;
 
-    gs.level=level;
-
-    loadlevel(gs.level);
+    loadlevel(level);
 
     // Start frame callbacks
     window.requestAnimationFrame(rafcallback);
@@ -693,6 +709,9 @@ function init()
   window.addEventListener("resize", function() { playfieldsize(); });
 
   playfieldsize();
+
+  // Make a deep copy of the levels as they were before changes
+  origlevels=JSON.parse(JSON.stringify(levels));
 
   // Load tilemap
   gs.tilemap=new Image;
