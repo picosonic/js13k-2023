@@ -489,6 +489,7 @@ function checkcollide()
   var pw=(TILESIZE/3);
   var ph=(TILESIZE/5)*3;
   var id=0;
+  var newitem={};
 
   // Iterate over all chars on the map
   for (id=0; id<gs.chars.length; id++)
@@ -544,8 +545,29 @@ function checkcollide()
               // Quickly get player in view
               scrolltoplayer(false);
             }
-            break;
           }
+          break;
+
+        case TILE_CHEST:
+          if (gs.path.length==0)
+          {
+            // Open the chest
+            gs.chars[id].id=TILE_CHESTOPEN;
+
+            // Duplicate chest object, change it to a reward
+            newitem=JSON.parse(JSON.stringify(gs.chars[id]));
+            newitem.id=TILE_COIN;
+  
+            // If below chest position is solid, spawn above, otherwise spawn below
+            if (gs.tiles[((Math.floor(newitem.y/TILESIZE)+1)*gs.width)+Math.floor(newitem.x/TILESIZE)]||0!=0)
+              newitem.y-=TILESIZE;
+            else
+              newitem.y+=TILESIZE;
+  
+            // Spawn reward into game
+            gs.chars.push(newitem);
+          }
+          break;
 
         default:
           break;
