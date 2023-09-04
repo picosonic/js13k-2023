@@ -177,3 +177,5 @@ Allow treasure chests to be opened, they all reveal coins for now.
 But spawning in the same place as the chest didn't work because the player character was also occupying that space and promptly collected the coin because they were overlapping it already meaning it was never seen. So decided to spawn below the chest.
 
 Then fixed issue where treasure could be spawned somewhere inaccessible. When the area below the chest was solid or unreachable the coin could not be collected. Now it checks for the location below being empty and spawns above the chest if it can't spawn below.
+
+It's bugged me that the state of levels isn't preserved as the player moves in and out of buildings through the doors. So I've cached the original state of the levels so the game can be completely restarted. Plus the chars for each level get minified upon loading, which means the nulls are taken out and the x,y positions are set.
