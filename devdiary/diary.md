@@ -179,3 +179,17 @@ But spawning in the same place as the chest didn't work because the player chara
 Then fixed issue where treasure could be spawned somewhere inaccessible. When the area below the chest was solid or unreachable the coin could not be collected. Now it checks for the location below being empty and spawns above the chest if it can't spawn below.
 
 It's bugged me that the state of levels isn't preserved as the player moves in and out of buildings through the doors. So I've cached the original state of the levels so the game can be completely restarted. Plus the chars for each level get minified upon loading, which means the nulls are taken out and the x,y positions are set.
+
+5th September
+-------------
+Write the name of the room at the top of the screen when going inside buildings.
+
+Added some rainbow particles when opening treasure chests.
+
+Ignore other mouse buttons, so only left clicks are processed.
+
+Added some helper functions to use in character AI.
+
+Added logic for ladders/stairs.
+
+Added stausbar which will start off showing coins collected.
