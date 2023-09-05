@@ -595,6 +595,9 @@ function checkcollide()
   
             // Spawn reward into game
             gs.chars.push(newitem);
+
+            // Draw rainbow particles
+            generateparticles(gs.chars[id].x+(TILESIZE/2), gs.chars[id].y+(TILESIZE/2), 16, 64, {});
           }
           break;
 
