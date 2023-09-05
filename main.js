@@ -532,6 +532,25 @@ function checkcollide()
           gs.chars[id].del=true; // Remove coin from map
           break;
 
+        case TILE_LADDER:
+          if (gs.path.length==0)
+          {
+            // Load the level corresponding to this ladder
+            var laddername=""+Math.floor(gs.x/TILESIZE)+","+Math.floor(gs.y/TILESIZE);
+            for (var ladderlevel=0; ladderlevel<levels.length; ladderlevel++)
+            {
+              if (levels[ladderlevel].ladder==laddername)
+              {
+                loadlevel(ladderlevel);
+                break;
+              }
+            }
+
+            // Quickly get player in view
+            scrolltoplayer(false);
+          }
+          break;
+
         case TILE_DOOR1:
         case TILE_DOOR2:
         case TILE_DOOR3:
@@ -654,6 +673,15 @@ function countchars(tileids)
 function updatecharAI()
 {
   var id=0;
+
+  for (id=0; id<gs.chars.length; id++)
+  {
+    switch (gs.chars[id].id)
+    {
+      default:
+        break;
+    }
+  }
 
   // Remove anything marked for deletion
   id=gs.chars.length;
