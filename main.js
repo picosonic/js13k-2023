@@ -608,6 +608,48 @@ function checkcollide()
   }
 }
 
+// Determine distance (Hypotenuse) between two lengths in 2D space (using Pythagoras)
+function calcHypotenuse(a, b)
+{
+  return(Math.sqrt((a * a) + (b * b)));
+}
+
+// Find the nearst char of type included in tileids to given x, y point or -1
+function findnearestchar(x, y, tileids)
+{
+  var closest=(gs.width*gs.height*TILESIZE);
+  var charid=-1;
+  var dist;
+
+  for (var id=0; id<gs.chars.length; id++)
+  {
+    if (tileids.includes(gs.chars[id].id))
+    {
+      dist=calcHypotenuse(Math.abs(x-gs.chars[id].x), Math.abs(y-gs.chars[id].y));
+
+      if (dist<closest)
+      {
+        charid=id;
+        closest=dist;
+      }
+    }
+  }
+
+  return charid;
+}
+
+function countchars(tileids)
+{
+  var found=0;
+
+  for (var id=0; id<gs.chars.length; id++)
+    if (tileids.includes(gs.chars[id].id))
+      found++;
+
+  return found;
+}
+
+
 // Update movement and logic of characters
 function updatecharAI()
 {
