@@ -94,6 +94,7 @@ var gs={
   tileid:TILE_PLAYER, // current player tile
   flip:false, // if player is horizontally flipped
   path:[], // path player is following when moving
+  coins:0, // coins collected
 
   // Level attributes
   level:-1, // Level number (0 based)
@@ -456,6 +457,38 @@ function scrolltoplayer(dampened)
   }
 }
 
+// https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-using-html-canvas
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r)
+{
+  if (w<(2*r)) r=w/2;
+  if (h<(2*r)) r=h/2;
+
+  this.beginPath();
+  this.moveTo(x+r, y);
+  this.arcTo(x+w, y,   x+w, y+h, r);
+  this.arcTo(x+w, y+h, x,   y+h, r);
+  this.arcTo(x,   y+h, x,   y,   r);
+  this.arcTo(x,   y,   x+w, y,   r);
+  this.closePath();
+
+  return this;
+};
+
+// Draw the statusbar
+function drawstatusbar()
+{
+  var fontsize=1;
+
+  // Draw box
+  gs.sctx.fillStyle="rgba(255,255,255,0.55)";
+  gs.sctx.strokeStyle="rgba(0,0,0,0)";
+  gs.sctx.roundRect(10, 10, 30, 35, 10).fill();
+
+  // Show how many coins have been collected
+  drawsprite({id:TILE_COIN, x:16+gs.xoffset, y:12+gs.yoffset, flip:false});
+  write(gs.sctx, 20, 30, ""+gs.coins, 1, "rgb(0,0,0)");
+}
+
 // Redraw the game world
 function redraw()
 {
@@ -484,6 +517,9 @@ function redraw()
   // Draw the cursor
   if ((gs.cursor) && (!gs.touch))
     drawsprite({id:TILE_CURSOR, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
+
+  // Draw the statusbar
+  drawstatusbar();
 
   // Draw the room name
   if (gs.level>0)
@@ -530,6 +566,7 @@ function checkcollide()
       {
         case TILE_COIN:
           gs.chars[id].del=true; // Remove coin from map
+          gs.coins++;
           break;
 
         case TILE_LADDER:
