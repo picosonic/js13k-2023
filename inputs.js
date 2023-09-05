@@ -12,7 +12,9 @@ function settarget(e)
   // e.pageX/Y (document relative)
   // e.screenX/Y (screen relative)
   // e.layerX/Y (original element relative - scaled)
-  //console.log(e);
+
+  if (e.button!=0) return;
+
   var myx=Math.floor((e.clientX-e.target.getBoundingClientRect().left)/gs.scale)+gs.xoffset;
   var myy=Math.floor((e.clientY-e.target.getBoundingClientRect().top)/gs.scale)+gs.yoffset;
   //console.log(myx+", "+myy);
