@@ -122,6 +122,8 @@ var gs={
   debug:false
 };
 
+var origlevels={};
+
 // Random number generator
 function rng()
 {
@@ -482,6 +484,15 @@ function redraw()
   // Draw the cursor
   if ((gs.cursor) && (!gs.touch))
     drawsprite({id:TILE_CURSOR, x:gs.cursorx+gs.xoffset, y:gs.cursory+gs.yoffset, flip:false});
+
+  // Draw the room name
+  if (gs.level>0)
+  {
+    var roomname=levels[gs.level].title;
+    var fontsize=2;
+
+    write(gs.sctx, (XMAX/2)-((roomname.length/2)*font_width*fontsize), 10, roomname, fontsize, "rgb(255,255,255)");
+  }
 }
 
 // Check if area a overlaps with area b
