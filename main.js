@@ -505,9 +505,18 @@ function drawsign()
   var icon=TILE_SIGN;
   const boxborder=1;
 
+  // Find text for signpost
+  for (i=0; i<signs.length; i++)
+  {
+    if (signs[i].loc==gs.signpost)
+      break;
+  }
+  if (i==signs.length)
+    i-=1;
+
   // Draw box
   // Split on \n
-  const txtlines=("SIGNPOST TEXT "+gs.signpost+"").split("\n");
+  const txtlines=(gs.signpost+"\n"+signs[i].txt).split("\n");
 
   // Determine width (length of longest string + border)
   for (i=0; i<txtlines.length; i++)
