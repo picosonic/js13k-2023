@@ -103,6 +103,7 @@ var gs={
   height:0, // height in tiles
   xoffset:0, // current view offset from left (horizontal scroll)
   yoffset:0, // current view offset from top (vertical scroll)
+  signpost:"", // when not empty holds coordinates of signpost we're over
 
   // Tiles
   tiles:[], // copy of current level (to allow destruction)
@@ -493,6 +494,75 @@ function drawstatusbar()
   write(gs.sctx, 20, 30, ""+gs.coins, 1, "rgb(0,0,0)");
 }
 
+// Draw text from a sign
+function drawsign()
+{
+  var fontsize=1;
+  var i;
+  var width=0;
+  var height=0;
+  var top=0;
+  var icon=TILE_SIGN;
+  const boxborder=1;
+
+  // Draw box
+  // Split on \n
+  const txtlines=("SIGNPOST TEXT "+gs.signpost+"").split("\n");
+
+  // Determine width (length of longest string + border)
+  for (i=0; i<txtlines.length; i++)
+  {
+    // Check for and remove icon from first line
+    if ((i==0) && (txtlines[i].indexOf("[")==0))
+    {
+      var endbracket=txtlines[i].indexOf("]");
+      if (endbracket!=-1)
+      {
+        icon=parseInt(txtlines[i].substring(1, endbracket), 10);
+        txtlines[i]=txtlines[i].substring(endbracket+1);
+      }
+    }
+
+    if (txtlines[i].length>width)
+      width=txtlines[i].length;
+  }
+
+  width+=(boxborder*2);
+
+  // Determine height (number of lines + border)
+  height=txtlines.length+(boxborder*2);
+
+  // Convert width/height into pixels
+  width*=font_width;
+  height*=(font_height+1);
+
+  // Add space if sprite is to be drawn
+  if (icon!=-1)
+  {
+    // Check for centering text when only one line and icon pads height
+    if (txtlines.length==1)
+      top=0.5;
+
+    width+=(TILESIZE+(font_width*2));
+
+    if (height<(TILESIZE+(2*font_height)))
+      height=TILESIZE+(2*font_height);
+  }
+
+  // Draw box
+  gs.sctx.fillStyle="rgba(255,255,255,0.75)";
+  gs.sctx.strokeStyle="rgba(0,0,0,0)";
+  gs.sctx.roundRect(XMAX-(width+(boxborder*font_width)), 1*font_height, width, height, font_width).fill();
+
+    // Draw optional sprite
+    if (icon!=-1)
+      drawsprite({id:icon, x:(XMAX-width)+gs.xoffset, y:((boxborder*2)*font_height)+gs.yoffset, flip:false});
+
+  // Draw text //
+  for (i=0; i<txtlines.length; i++)
+    write(gs.sctx, XMAX-width+(icon==-1?0:TILESIZE+font_width), (i+(boxborder*2)+top)*(font_height+1), txtlines[i], 1, "rgba(0,0,0,0.75)");
+}
+
 // Redraw the game world
 function redraw()
 {
@@ -524,6 +594,10 @@ function redraw()
 
   // Draw the statusbar
   drawstatusbar();
+
+  // Draw sign if we're over one
+  if (gs.signpost!="")
+    drawsign();
 
   // Draw the room name
   if (gs.level>0)
@@ -559,6 +633,8 @@ function checkcollide()
   var ph=(TILESIZE/5)*3;
   var id=0;
   var newitem={};
+
+  gs.signpost="";
 
   // Iterate over all chars on the map
   for (id=0; id<gs.chars.length; id++)
@@ -635,6 +711,10 @@ function checkcollide()
               scrolltoplayer(false);
             }
           }
+          break;
+
+        case TILE_SIGN:
+          gs.signpost=""+Math.floor(gs.x/TILESIZE)+","+Math.floor(gs.y/TILESIZE);
           break;
 
         case TILE_CHEST:
