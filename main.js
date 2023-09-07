@@ -6,6 +6,7 @@ const YMAX=180;
 const TILESIZE=16;
 const TILESPERROW=12;
 const BGCOLOUR="#80c768";
+const BGCOLOURROOM="#8d9bb4";
 
 const STATEINTRO=0;
 const STATEMENU=1;
@@ -286,7 +287,10 @@ function updateMovements()
       gs.path.shift();
 
       // Generate some "dust" as we move
-      generateparticles(gs.x+(TILESIZE/2), gs.y+TILESIZE, 1, 1, {r:1, g:170, b:1});
+      if (gs.level==0)
+        generateparticles(gs.x+(TILESIZE/2), gs.y+TILESIZE, 1, 1, {r:1, g:170, b:1});
+      else
+        generateparticles(gs.x+(TILESIZE/2), gs.y+TILESIZE, 1, 1, {r:128, g:128, b:128});
     }
     else
     {
@@ -496,7 +500,7 @@ function redraw()
   scrolltoplayer(true);
 
   // Clear the tile canvas
-  gs.ctx.fillStyle=BGCOLOUR;
+  gs.ctx.fillStyle=(gs.level==0?BGCOLOUR:BGCOLOURROOM);
   gs.ctx.fillRect(0, 0, gs.canvas.width, gs.canvas.height);
 
   // Draw the level
@@ -527,7 +531,7 @@ function redraw()
     var roomname=levels[gs.level].title;
     var fontsize=2;
 
-    write(gs.sctx, (XMAX/2)-((roomname.length/2)*font_width*fontsize), 10, roomname, fontsize, "rgb(255,255,255)");
+    write(gs.sctx, (XMAX/2)-((roomname.length/2)*font_width*fontsize), 10, roomname, fontsize, "rgb(0,0,0)");
   }
 }
 
