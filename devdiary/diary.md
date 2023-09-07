@@ -193,3 +193,17 @@ Added some helper functions to use in character AI.
 Added logic for ladders/stairs.
 
 Added stausbar which will start off showing coins collected.
+
+6th September
+-------------
+Added stuff to Wizard's attic.
+
+7th September
+-------------
+Made a basic launcher batch file for windows environments.
+
+Use different background colours between map and buildings.
+
+Also use differently coloured dust between map and buildings.
+
+Added logic for reading signposts when over them. Need to add some guide ones near the level entry point to give some background.
