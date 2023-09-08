@@ -353,7 +353,7 @@ function loadlevel(level)
 
         if (tile!=0)
         {
-          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), flip:false, hs:0, vs:0, del:false};
+          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], del:false};
 
           switch (tile-1)
           {
@@ -391,6 +391,9 @@ function loadlevel(level)
 
   gs.path=[]; // Clear any path being followed
   gs.particles=[]; // Clear any leftover particles
+
+  // Sort chars such sprites are at the end (so are drawn last, i.e on top)
+  gs.chars.sort(sortChars);
 }
 
 // Draw level
@@ -798,16 +801,106 @@ function countchars(tileids)
   return found;
 }
 
+// Sort the chars so sprites are last (so they appear in front of non-solid tiles)
+function sortChars(a, b)
+{
+  if (a.id!=b.id) // extra processing if they are different ids
+  {
+    var aspr=(((a.id>=135) && (a.id<=154)) || ((a.id>=156) && (a.id<=160))); // see if a is a sprite
+    var bspr=(((b.id>=135) && (b.id<=154)) || ((b.id>=156) && (b.id<=160))); // see if b is a sprite
+
+    if (aspr==bspr) return 0; // both sprites, so don't swap
+
+    if (aspr)
+      return 1; // sort a after b
+    else
+      return -1; // sort a before b
+  }
+
+  return 0; // same id
+}
 
 // Update movement and logic of characters
 function updatecharAI()
 {
   var id=0;
+  var tid=-1; // Target id
 
   for (id=0; id<gs.chars.length; id++)
   {
+    // Check if dwelling
+    if (gs.chars[id].dwell>0)
+    {
+      gs.chars[id].dwell--;
+      continue;
+    }
+
+    // Check if moving
+    if (gs.chars[id].path.length>0)
+    {
+      var nextx=Math.floor(gs.chars[id].path[0]%gs.width)*TILESIZE;
+      var nexty=Math.floor(gs.chars[id].path[0]/gs.width)*TILESIZE;
+      var deltax=Math.abs(nextx-gs.chars[id].x);
+      var deltay=Math.abs(nexty-gs.chars[id].y);
+
+      // Check if we have arrived at the current path node
+      if ((deltax==0) && (deltay==0))
+      {
+        // We are here, so move on to next path node
+        gs.chars[id].path.shift();
+
+        // Check for being at end of path
+        if (gs.chars[id].path.length==0)
+        {
+          // Following a move, wait a bit here
+          gs.chars[id].dwell=(2*60);
+        }
+      }
+      else
+      {
+        var charspeed=1;
+
+        // Move onwards, following path
+        if (deltax!=0)
+        {
+          gs.chars[id].hs=(nextx<gs.chars[id].x)?-charspeed:charspeed;
+          gs.chars[id].x+=gs.chars[id].hs;
+          gs.chars[id].flip=(gs.chars[id].hs<0);
+
+          if (gs.chars[id].x<0)
+            gs.chars[id].x=0;
+        }
+
+        if (deltay!=0)
+        {
+          gs.chars[id].y+=(nexty<gs.chars[id].y)?-charspeed:charspeed;
+
+          if (gs.chars[id].x<0)
+            gs.chars[id].x=0;
+        }
+      }
+
+      continue;
+    }
+
+    // For things which are not dwelling or moving, decide what to do next.
     switch (gs.chars[id].id)
     {
+      case TILE_RAT:
+      case TILE_RAT2:
+        tid=findnearestchar(gs.chars[id].x, gs.chars[id].y, [TILE_WIZARD]);
+
+        // If we found something, plot a route to it
+        if (tid!=-1)
+        {
+          gs.chars[id].path=pathfinder(
+            (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
+            ,
+            (Math.floor(gs.chars[tid].y/TILESIZE)*gs.width)+Math.floor(gs.chars[tid].x/TILESIZE)
+            );
+        }
+        break;
+        
       default:
         break;
     }
