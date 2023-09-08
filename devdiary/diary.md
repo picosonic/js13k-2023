@@ -207,3 +207,7 @@ Use different background colours between map and buildings.
 Also use differently coloured dust between map and buildings.
 
 Added logic for reading signposts when over them. Need to add some guide ones near the level entry point to give some background.
+
+8th September
+-------------
+Make the rats chase the wizard to test AI.
