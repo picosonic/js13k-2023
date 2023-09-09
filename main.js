@@ -42,7 +42,20 @@ const TILE_BUCKET=130;
 const TILE_BUCKETFULL=131;
 const TILE_CURSOR=132;
 const TILE_WIZARD=135;
+const TILE_VILLAGER1=136;
+const TILE_VILLAGER2=137;
+const TILE_VILLAGER3=138;
+const TILE_VILLAGER4=139;
+const TILE_KNIGHT1=140;
+const TILE_KNIGHT2=141;
+const TILE_KNIGHT3=142;
 const TILE_PLAYER=143;
+const TILE_BLACKSMITH=144;
+const TILE_GHOUL=145;
+const TILE_CYCLOPS=146;
+const TILE_CRAB=147;
+const TILE_MONK=148;
+const TILE_WOODMAN=149;
 const TILE_BAT=150;
 const TILE_GHOST=151;
 const TILE_SPIDER=152;
@@ -353,7 +366,7 @@ function loadlevel(level)
 
         if (tile!=0)
         {
-          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], del:false};
+          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), sx:(x*TILESIZE), sy:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], del:false};
 
           switch (tile-1)
           {
@@ -888,7 +901,7 @@ function updatecharAI()
     {
       case TILE_RAT:
       case TILE_RAT2:
-        tid=findnearestchar(gs.chars[id].x, gs.chars[id].y, [TILE_WIZARD]);
+        tid=findnearestchar(gs.chars[id].x, gs.chars[id].y, [TILE_VILLAGER1, TILE_VILLAGER2, TILE_VILLAGER3, TILE_VILLAGER4]);
 
         // If we found something, plot a route to it
         if (tid!=-1)
@@ -898,6 +911,38 @@ function updatecharAI()
             ,
             (Math.floor(gs.chars[tid].y/TILESIZE)*gs.width)+Math.floor(gs.chars[tid].x/TILESIZE)
             );
+        }
+        break;
+
+      case TILE_VILLAGER1: // Beekeeper
+      case TILE_VILLAGER2:
+      case TILE_VILLAGER3:
+      case TILE_VILLAGER4:
+        // If there is a threat nearby, run away, otherwise stay home
+        tid=findnearestchar(gs.chars[id].x, gs.chars[id].y, [TILE_RAT, TILE_RAT2]);
+        if (tid!=-1)
+        {
+          if (calcHypotenuse(Math.abs(gs.chars[tid].x-gs.chars[id].x), Math.abs(gs.chars[tid].y-gs.chars[id].y))<(5*TILESIZE))
+          {
+            // Pick somewhere random to run away to
+            var nx=Math.floor(rng()*gs.width*TILESIZE);
+            var ny=Math.floor(rng()*gs.height*TILESIZE);
+
+            gs.chars[id].path=pathfinder(
+              (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
+              ,
+              (Math.floor(ny/TILESIZE)*gs.width)+Math.floor(nx/TILESIZE)
+              );
+          }
+          else
+          {
+            // Go back to level start position
+            gs.chars[id].path=pathfinder(
+              (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
+              ,
+              (Math.floor(gs.chars[id].sy/TILESIZE)*gs.width)+Math.floor(gs.chars[id].sx/TILESIZE)
+              );
+          }
         }
         break;
         
