@@ -109,6 +109,7 @@ var gs={
   flip:false, // if player is horizontally flipped
   path:[], // path player is following when moving
   coins:0, // coins collected
+  key:false, // has key been collected
 
   // Level attributes
   level:-1, // Level number (0 based)
@@ -509,15 +510,40 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r)
 function drawstatusbar()
 {
   var fontsize=1;
+  var boxheight=0;
+  var boxypos=0;
+
+  // Display coin count when we have some
+  if (gs.coins>0)
+    boxheight+=TILESIZE;
+
+  // Display key when collected
+  if (gs.key)
+    boxheight+=TILESIZE;
+
+  // Don't draw empty box
+  if (boxheight==0) return;
 
   // Draw box
   gs.sctx.fillStyle="rgba(255,255,255,0.55)";
   gs.sctx.strokeStyle="rgba(0,0,0,0)";
-  gs.sctx.roundRect(10, 10, 30, 35, 10).fill();
+  gs.sctx.roundRect(10, 10, TILESIZE*2, 5+boxheight, 5).fill();
 
   // Show how many coins have been collected
-  drawsprite({id:TILE_COIN, x:16+gs.xoffset, y:12+gs.yoffset, flip:false});
-  write(gs.sctx, 20, 30, ""+gs.coins, 1, "rgb(0,0,0)");
+  if (gs.coins>0)
+  {
+    drawsprite({id:TILE_COIN, x:12+gs.xoffset, y:12+boxypos+gs.yoffset, flip:false});
+    write(gs.sctx, 12+TILESIZE, 16+boxypos, ""+gs.coins, 1, "rgb(0,0,0)");
+
+    boxypos+=TILESIZE;
+  }
+
+  // Show that we've collected key
+  if (gs.key)
+  {
+    drawsprite({id:TILE_KEY, x:12+gs.xoffset, y:12+boxypos+gs.yoffset, flip:false});
+    boxypos+=TILESIZE;
+  }
 }
 
 // Draw text from a sign
@@ -684,6 +710,11 @@ function checkcollide()
           gs.coins++;
           break;
 
+        case TILE_KEY:
+          gs.chars[id].del=true; // Remove key from map
+          gs.key=true;
+          break;
+
         case TILE_LADDER:
           if (gs.path.length==0)
           {
@@ -715,23 +746,36 @@ function checkcollide()
           {
             if (gs.level==0)
             {
-              // Remember where we were
-              gs.doorx=gs.x;
-              gs.doory=gs.y;
-
-              // Load the level corresponding to this door
-              var doorname=""+Math.floor(gs.x/TILESIZE)+","+Math.floor(gs.y/TILESIZE);
-              for (var doorlevel=0; doorlevel<levels.length; doorlevel++)
+              if ((gs.chars[id].open||false) || (gs.key))
               {
-                if (levels[doorlevel].door==doorname)
+                // If door was locked, unlock it
+                if ((gs.chars[id].open||false)==false)
                 {
-                  loadlevel(doorlevel);
-                  break;
-                }
-              }
+                  // Unlock door
+                  gs.chars[id].open=true;
 
-              // Quickly get player in view
-              scrolltoplayer(false);
+                  // Remove the key we just used
+                  gs.key=false;
+                }
+
+                // Remember where we were
+                gs.doorx=gs.x;
+                gs.doory=gs.y;
+
+                // Load the level corresponding to this door
+                var doorname=""+Math.floor(gs.x/TILESIZE)+","+Math.floor(gs.y/TILESIZE);
+                for (var doorlevel=0; doorlevel<levels.length; doorlevel++)
+                {
+                  if (levels[doorlevel].door==doorname)
+                  {
+                    loadlevel(doorlevel);
+                    break;
+                  }
+                }
+
+                // Quickly get player in view
+                scrolltoplayer(false);
+              }
             }
             else
             {
