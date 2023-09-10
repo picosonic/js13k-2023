@@ -211,3 +211,11 @@ Added logic for reading signposts when over them. Need to add some guide ones ne
 8th September
 -------------
 Make the rats chase the wizard to test AI.
+
+10th September
+--------------
+Make the rats infect the villagers. They now have health bar which reduces on each contact. Once the health reaches zero they turn into a ghost.
+
+Added key logic, so you can collect a key. Once collected you can open a door. Then that door remembers that it is unlocked.
+
+Allow multiple keys to be collected and used.
