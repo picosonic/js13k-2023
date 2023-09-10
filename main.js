@@ -110,6 +110,7 @@ var gs={
   path:[], // path player is following when moving
   coins:0, // coins collected
   keys:0, // keys collected
+  potions:[], // potions collected
 
   // Level attributes
   level:-1, // Level number (0 based)
@@ -521,6 +522,12 @@ function drawstatusbar()
   if (gs.keys>0)
     boxheight+=TILESIZE;
 
+  // Display potions when collected
+  if (gs.potions.includes(TILE_POTIONWHITE)) boxheight+=TILESIZE;
+  if (gs.potions.includes(TILE_POTIONGREEN)) boxheight+=TILESIZE;
+  if (gs.potions.includes(TILE_POTIONRED)) boxheight+=TILESIZE;
+  if (gs.potions.includes(TILE_POTIONBLUE)) boxheight+=TILESIZE;
+
   // Don't draw empty box
   if (boxheight==0) return;
 
@@ -538,15 +545,35 @@ function drawstatusbar()
     boxypos+=TILESIZE;
   }
 
-  // Show that we've collected key
+  // Show how many keys we've collected
   if (gs.keys>0)
   {
     drawsprite({id:TILE_KEY, x:12+gs.xoffset, y:12+boxypos+gs.yoffset, flip:false});
 
     if (gs.keys>1)
-    write(gs.sctx, 15+TILESIZE, 16+boxypos, ""+gs.keys, 1, "rgb(0,0,0)");
+      write(gs.sctx, 15+TILESIZE, 16+boxypos, ""+gs.keys, 1, "rgb(0,0,0)");
   
     boxypos+=TILESIZE;
+  }
+
+  // Show which and how many of each potion we have
+  if (gs.potions.length>0)
+  {
+    for (var potion of [TILE_POTIONWHITE, TILE_POTIONGREEN, TILE_POTIONRED, TILE_POTIONBLUE])
+    {
+      if (gs.potions.includes(potion))
+      {
+        const initialvalue=0;
+        const potioncounter=gs.potions.reduce((accumulator, curpotion) => accumulator + (curpotion==potion?1:0), initialvalue);
+
+        drawsprite({id:potion, x:12+gs.xoffset, y:12+boxypos+gs.yoffset, flip:false});
+
+        if (potioncounter>1)
+          write(gs.sctx, 15+TILESIZE, 16+boxypos, ""+potioncounter, 1, "rgb(0,0,0)");
+
+        boxypos+=TILESIZE;
+      }
+    }    
   }
 }
 
@@ -717,6 +744,14 @@ function checkcollide()
         case TILE_KEY:
           gs.chars[id].del=true; // Remove key from map
           gs.keys++;
+          break;
+
+        case TILE_POTIONWHITE:
+        case TILE_POTIONGREEN:
+        case TILE_POTIONRED:
+        case TILE_POTIONBLUE:
+          gs.chars[id].del=true; // Remove potion from map
+          gs.potions.push(gs.chars[id].id);
           break;
 
         case TILE_LADDER:
