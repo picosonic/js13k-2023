@@ -219,3 +219,5 @@ Make the rats infect the villagers. They now have health bar which reduces on ea
 Added key logic, so you can collect a key. Once collected you can open a door. Then that door remembers that it is unlocked.
 
 Allow multiple keys to be collected and used.
+
+Map updates. Added two levels for inside church. Added a hero's house.
