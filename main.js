@@ -594,12 +594,12 @@ function drawsign()
     if (signs[i].loc==gs.signpost)
       break;
   }
-  if (i==signs.length)
-    i-=1;
+  if (i==signs.length) // See if nothing found
+    return;
 
   // Draw box
   // Split on \n
-  const txtlines=(gs.signpost+"\n"+signs[i].txt).split("\n");
+  const txtlines=(signs[i].txt).split("\n");
 
   // Determine width (length of longest string + border)
   for (i=0; i<txtlines.length; i++)
@@ -815,6 +815,8 @@ function checkcollide()
                 // Quickly get player in view
                 scrolltoplayer(false);
               }
+              else
+                gs.signpost="-1,-1";
             }
             else
             {
