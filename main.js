@@ -109,7 +109,7 @@ var gs={
   flip:false, // if player is horizontally flipped
   path:[], // path player is following when moving
   coins:0, // coins collected
-  key:false, // has key been collected
+  keys:0, // keys collected
 
   // Level attributes
   level:-1, // Level number (0 based)
@@ -518,7 +518,7 @@ function drawstatusbar()
     boxheight+=TILESIZE;
 
   // Display key when collected
-  if (gs.key)
+  if (gs.keys>0)
     boxheight+=TILESIZE;
 
   // Don't draw empty box
@@ -527,21 +527,25 @@ function drawstatusbar()
   // Draw box
   gs.sctx.fillStyle="rgba(255,255,255,0.55)";
   gs.sctx.strokeStyle="rgba(0,0,0,0)";
-  gs.sctx.roundRect(10, 10, TILESIZE*2, 5+boxheight, 5).fill();
+  gs.sctx.roundRect(10, 10, (TILESIZE*2)+5, 5+boxheight, 5).fill();
 
   // Show how many coins have been collected
   if (gs.coins>0)
   {
     drawsprite({id:TILE_COIN, x:12+gs.xoffset, y:12+boxypos+gs.yoffset, flip:false});
-    write(gs.sctx, 12+TILESIZE, 16+boxypos, ""+gs.coins, 1, "rgb(0,0,0)");
+    write(gs.sctx, 15+TILESIZE, 16+boxypos, ""+gs.coins, 1, "rgb(0,0,0)");
 
     boxypos+=TILESIZE;
   }
 
   // Show that we've collected key
-  if (gs.key)
+  if (gs.keys>0)
   {
     drawsprite({id:TILE_KEY, x:12+gs.xoffset, y:12+boxypos+gs.yoffset, flip:false});
+
+    if (gs.keys>1)
+    write(gs.sctx, 15+TILESIZE, 16+boxypos, ""+gs.keys, 1, "rgb(0,0,0)");
+  
     boxypos+=TILESIZE;
   }
 }
@@ -712,7 +716,7 @@ function checkcollide()
 
         case TILE_KEY:
           gs.chars[id].del=true; // Remove key from map
-          gs.key=true;
+          gs.keys++;
           break;
 
         case TILE_LADDER:
@@ -746,7 +750,7 @@ function checkcollide()
           {
             if (gs.level==0)
             {
-              if ((gs.chars[id].open||false) || (gs.key))
+              if ((gs.chars[id].open||false) || (gs.keys>0))
               {
                 // If door was locked, unlock it
                 if ((gs.chars[id].open||false)==false)
@@ -755,7 +759,7 @@ function checkcollide()
                   gs.chars[id].open=true;
 
                   // Remove the key we just used
-                  gs.key=false;
+                  gs.keys--;
                 }
 
                 // Remember where we were
