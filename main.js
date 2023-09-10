@@ -366,7 +366,7 @@ function loadlevel(level)
 
         if (tile!=0)
         {
-          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), sx:(x*TILESIZE), sy:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], del:false};
+          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), sx:(x*TILESIZE), sy:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], health:100, del:false};
 
           switch (tile-1)
           {
@@ -426,7 +426,17 @@ function drawlevel()
 function drawchars()
 {
   for (var id=0; id<gs.chars.length; id++)
+  {
     drawsprite(gs.chars[id]);
+
+    // Draw health bar when hurt
+    if (((gs.chars[id].health||0)>0) && (gs.chars[id].health<100))
+    {
+      gs.sctx.fillStyle="rgba(0,255,0,0.75)";
+      gs.sctx.fillRect(gs.chars[id].x-gs.xoffset, gs.chars[id].y-gs.yoffset, Math.ceil(TILESIZE*(gs.chars[id].health/100)), 2);
+      gs.sctx.stroke();
+    }
+  }
 }
 
 // Scroll level to player
@@ -846,6 +856,36 @@ function updatecharAI()
     {
       gs.chars[id].dwell--;
       continue;
+    }
+
+    // Check for collision
+    for (var id2=0; id2<gs.chars.length; id2++)
+    {
+      // Has a collision taken place between this and another character
+      if (overlap(gs.chars[id].x, gs.chars[id].y, TILESIZE, TILESIZE, gs.chars[id2].x, gs.chars[id2].y, TILESIZE, TILESIZE))
+      {
+        // Determine what to do based on current character
+        switch (gs.chars[id].id)
+        {
+          case TILE_RAT:
+          case TILE_RAT2:
+            if ([TILE_VILLAGER1, TILE_VILLAGER2, TILE_VILLAGER3, TILE_VILLAGER4].includes(gs.chars[id2].id))
+            {
+              if (gs.chars[id2].health>0)
+              {
+                gs.chars[id2].health--;
+
+                // If they have run out of health turn them into a ghost
+                if (gs.chars[id2].health==0)
+                  gs.chars[id2].id=TILE_GHOUL;
+              }
+            }
+            break;
+
+          default:
+            break;
+        }
+      }
     }
 
     // Check if moving
