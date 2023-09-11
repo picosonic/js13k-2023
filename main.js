@@ -1028,6 +1028,7 @@ function updatecharAI()
       var nexty=Math.floor(gs.chars[id].path[0]/gs.width)*TILESIZE;
       var deltax=Math.abs(nextx-gs.chars[id].x);
       var deltay=Math.abs(nexty-gs.chars[id].y);
+      var nx, ny;
 
       // Check if we have arrived at the current path node
       if ((deltax==0) && (deltay==0))
@@ -1087,6 +1088,18 @@ function updatecharAI()
         }
         break;
 
+      case TILE_GHOUL:
+        // Pick somewhere random to go to around the church
+        nx=Math.floor((21+(rng()*15))*TILESIZE);
+        ny=Math.floor(( 0+(rng()*13))*TILESIZE);
+
+        gs.chars[id].path=pathfinder(
+          (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
+          ,
+          (Math.floor(ny/TILESIZE)*gs.width)+Math.floor(nx/TILESIZE)
+          );
+        break;
+
       case TILE_VILLAGER1: // Beekeeper
       case TILE_VILLAGER2:
       case TILE_VILLAGER3:
@@ -1098,8 +1111,8 @@ function updatecharAI()
           if (calcHypotenuse(Math.abs(gs.chars[tid].x-gs.chars[id].x), Math.abs(gs.chars[tid].y-gs.chars[id].y))<(5*TILESIZE))
           {
             // Pick somewhere random to run away to
-            var nx=Math.floor(rng()*gs.width*TILESIZE);
-            var ny=Math.floor(rng()*gs.height*TILESIZE);
+            nx=Math.floor(rng()*gs.width*TILESIZE);
+            ny=Math.floor(rng()*gs.height*TILESIZE);
 
             gs.chars[id].path=pathfinder(
               (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
