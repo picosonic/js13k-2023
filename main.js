@@ -111,6 +111,7 @@ var gs={
   coins:0, // coins collected
   keys:0, // keys collected
   potions:[], // potions collected
+  dwell:0, // how long since an action occured
 
   // Level attributes
   level:-1, // Level number (0 based)
@@ -287,6 +288,10 @@ function particlecheck()
 function updateMovements()
 {
   var speed=1;
+
+  // Countdown since an action
+  if (gs.dwell>0)
+    gs.dwell--;
 
   // Move main character if a path is set
   if (gs.path.length>0)
@@ -776,8 +781,49 @@ function checkcollide()
         case TILE_POTIONGREEN:
         case TILE_POTIONRED:
         case TILE_POTIONBLUE:
-          gs.chars[id].del=true; // Remove potion from map
-          gs.potions.push(gs.chars[id].id);
+          if (gs.level==2)
+          {
+            // We're in the shop
+
+            // Make sure we are at the end of a walk
+            if (gs.path.length==0)
+            {
+              if (gs.chars[id].id==TILE_POTIONWHITE)
+              {
+                if (gs.coins>=5)
+                {
+                  if (gs.dwell==0)
+                  {
+                    gs.coins-=5;
+                    gs.potions.push(gs.chars[id].id);
+                  }
+                }
+                else
+                  gs.signpost="-2,-2";
+              }
+              else
+              {
+                if (gs.coins>=2)
+                {
+                  if (gs.dwell==0)
+                  {
+                    gs.coins-=2;
+                    gs.potions.push(gs.chars[id].id);
+                  }
+                }
+                else
+                  gs.signpost="-2,-2";
+              }
+
+              // Prevent all the money being spent on the same potion
+              gs.dwell=3*60;
+            }
+          }
+          else
+          {
+            gs.chars[id].del=true; // Remove potion from map
+            gs.potions.push(gs.chars[id].id);
+          }
           break;
 
         case TILE_LADDER:
@@ -888,6 +934,9 @@ function checkcollide()
             else if (spawnitem<=100)
               newitem.id=TILE_POTIONWHITE;
   
+            // Only spawn coins in the shop
+            if (gs.level==2) spawnitem=TILE_COIN;
+            
             // If below chest position is solid, spawn above, otherwise spawn below
             if (gs.tiles[((Math.floor(newitem.y/TILESIZE)+1)*gs.width)+Math.floor(newitem.x/TILESIZE)]||0!=0)
               newitem.y-=TILESIZE;
