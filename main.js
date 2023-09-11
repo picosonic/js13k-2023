@@ -871,7 +871,22 @@ function checkcollide()
 
             // Duplicate chest object, change it to a reward
             newitem=JSON.parse(JSON.stringify(gs.chars[id]));
-            newitem.id=TILE_COIN;
+
+            // Randomise item spawned from chest
+            var spawnitem=Math.floor(rng()*100);
+
+            if (spawnitem<50)
+              newitem.id=TILE_COIN;
+            else if (spawnitem<60)
+              newitem.id=TILE_KEY;
+            else if (spawnitem<70)
+              newitem.id=TILE_POTIONBLUE;
+            else if (spawnitem<80)
+              newitem.id=TILE_POTIONRED;
+            else if (spawnitem<90)
+              newitem.id=TILE_POTIONGREEN;
+            else if (spawnitem<=100)
+              newitem.id=TILE_POTIONWHITE;
   
             // If below chest position is solid, spawn above, otherwise spawn below
             if (gs.tiles[((Math.floor(newitem.y/TILESIZE)+1)*gs.width)+Math.floor(newitem.x/TILESIZE)]||0!=0)
