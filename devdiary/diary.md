@@ -221,3 +221,23 @@ Added key logic, so you can collect a key. Once collected you can open a door. T
 Allow multiple keys to be collected and used.
 
 Map updates. Added two levels for inside church. Added a hero's house.
+
+Allow potions to be collected, then show which potions have been collected and how many of each.
+
+When trying to enter a locked door without a key, pop up a message telling the player to find a key.
+
+11th September
+--------------
+Assign blood colour to characters who can be infected by the rats once their health falls below 80%.
+
+When players have a blood colour, they spout blood, either red, green or blue. The idea is that you'll need the correctly coloured potion to cure each person.
+
+Randomise treasure given when opening a chest. To 50% chance of coins, and 10% chance of each of the potions.
+
+When villagers die, they become ghouls, then go off to haunt the graveyard.
+
+Updated wizard's shop to look more like a shop.
+
+Added logic to shop so that potions in there can't be collected unless sufficient funds are held.
+
+Change chests in shop to only spawn coins, otherwise if a potion appears and you don't have enough money, you can't pick it up!
