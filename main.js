@@ -462,7 +462,7 @@ function drawchars()
           break;
       }
 
-      generateparticles(gs.x+(TILESIZE/2), gs.y+TILESIZE, 1, 1, blood);
+      generateparticles(gs.chars[id].x+(TILESIZE/2), gs.chars[id].y+TILESIZE, 1, 1, blood);
     }
   }
 }
