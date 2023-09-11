@@ -368,7 +368,7 @@ function loadlevel(level)
 
         if (tile!=0)
         {
-          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), sx:(x*TILESIZE), sy:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], health:100, del:false};
+          var obj={id:(tile-1), x:(x*TILESIZE), y:(y*TILESIZE), sx:(x*TILESIZE), sy:(y*TILESIZE), flip:false, hs:0, vs:0, dwell:0, path:[], health:100, cure:0, del:false};
 
           switch (tile-1)
           {
@@ -437,6 +437,32 @@ function drawchars()
       gs.sctx.fillStyle="rgba(0,255,0,0.75)";
       gs.sctx.fillRect(gs.chars[id].x-gs.xoffset, gs.chars[id].y-gs.yoffset, Math.ceil(TILESIZE*(gs.chars[id].health/100)), 2);
       gs.sctx.stroke();
+    }
+  
+    // If health is below 80% spout some blood
+    if (((gs.chars[id].health||0)>0) && (gs.chars[id].health<80))
+    {
+      var blood={r:1, g:1, b:1};
+
+      switch (gs.chars[id].blood||0)
+      {
+        case TILE_POTIONGREEN:
+          blood.g=255;
+          break;
+
+        case TILE_POTIONRED:
+          blood.r=255;
+          break;
+
+        case TILE_POTIONBLUE:
+          blood.b=255;
+          break;
+
+        default:
+          break;
+      }
+
+      generateparticles(gs.x+(TILESIZE/2), gs.y+TILESIZE, 1, 1, blood);
     }
   }
 }
@@ -958,6 +984,13 @@ function updatecharAI()
             {
               if (gs.chars[id2].health>0)
               {
+                // If health is dropping below 80% then assign random blood colour
+                if ((gs.chars[id2].health==80) && (gs.chars[id2].blood==undefined))
+                {
+                  // Assign random blood colour
+                  gs.chars[id2].blood=Math.floor(rng()*3)+TILE_POTIONGREEN;
+                }
+
                 gs.chars[id2].health--;
 
                 // If they have run out of health turn them into a ghost
