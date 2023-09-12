@@ -1344,7 +1344,9 @@ function rafcallback(timestamp)
     // If we're done then draw congrats message
     if (gs.state==STATECOMPLETE)
     {
-      // TODO
+      gs.signpost="-3,-3";
+
+      drawsign();
     }
 
     // If the update took us out of play state then stop now
