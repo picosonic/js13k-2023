@@ -469,10 +469,12 @@ function isgamecompleted()
 {
   // This is defined as ..
   //   no closed treasure chests
+  //   no coins
+  //   no potions
   var count=0;
 
   for (var level=0; level<levels.length; level++)
-    count+=countcharsonlevel([TILE_CHEST], level);
+    count+=countcharsonlevel([TILE_CHEST, TILE_COIN, TILE_POTIONBLUE, TILE_POTIONGREEN, TILE_POTIONRED, TILE_POTIONWHITE], level);
 
   return (count==0);
 }
