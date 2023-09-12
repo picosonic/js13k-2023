@@ -112,6 +112,7 @@ var gs={
   keys:0, // keys collected
   potions:[], // potions collected
   dwell:0, // how long since an action occured
+  health:100, // player health percentage
 
   // Level attributes
   level:-1, // Level number (0 based)
@@ -707,7 +708,14 @@ function redraw()
 
   // Draw the player
   drawsprite({id:gs.tileid, x:gs.x, y:gs.y+((gs.x%TILESIZE)==8?1:0), flip:gs.flip});
-
+  // Draw player health bar when hurt
+  if (gs.health<100)
+  {
+    gs.sctx.fillStyle="rgba(0,255,0,0.75)";
+    gs.sctx.fillRect(gs.x-gs.xoffset, gs.y-gs.yoffset, Math.ceil(TILESIZE*(gs.health/100)), 2);
+    gs.sctx.stroke();
+  }
+ 
   // Draw the particles
   drawparticles();
 
@@ -800,6 +808,13 @@ function checkcollide()
               }
             }
           }
+          break;
+
+        case TILE_CYCLOPS:
+        case TILE_BAT:
+        case TILE_GHOST:
+        case TILE_SPIDER:
+          if (gs.health>0) gs.health--;
           break;
 
         case TILE_POTIONWHITE:
