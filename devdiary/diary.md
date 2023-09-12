@@ -253,3 +253,5 @@ Make shy characters run away from you when you are nearby.
 Draw player health bar when hurt by enemies.
 
 Simplified completion state.
+
+When game in completed state, stop playing, and show completed message.
