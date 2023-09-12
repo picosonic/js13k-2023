@@ -473,6 +473,19 @@ function drawchars()
   }
 }
 
+// Check for game being completed
+function isgamecompleted()
+{
+  // This is defined as ..
+  //   no closed treasure chests
+  var count=0;
+
+  for (var level=0; level<levels.length; level++)
+    count+=countcharsonlevel([TILE_CHEST], level);
+
+  return (count==0);
+}
+
 // Scroll level to player
 function scrolltoplayer(dampened)
 {
@@ -1028,15 +1041,40 @@ function findnearestchar(x, y, tileids)
   return charid;
 }
 
-function countchars(tileids)
+function countcharsonlevel(tileids, level)
 {
   var found=0;
+  var id=0;
 
-  for (var id=0; id<gs.chars.length; id++)
-    if (tileids.includes(gs.chars[id].id))
-      found++;
+  if (level==gs.level)
+  {
+    for (id=0; id<gs.chars.length; id++)
+      if (tileids.includes(gs.chars[id].id))
+        found++;
+  }
+  else
+  {
+    for (id=0; id<levels[level].chars.length; id++)
+    {
+      if (levels[level].minified==undefined)
+      {
+        if (tileids.includes((levels[level].chars[id]||0)-1))
+          found++;
+      }
+      else
+      {
+        if (tileids.includes(levels[level].chars[id].id))
+          found++;
+      }
+    }
+  }
 
   return found;
+}
+
+function countchars(tileids)
+{
+  return countcharsonlevel(tileids, gs.level);
 }
 
 // Sort the chars so sprites are last (so they appear in front of non-solid tiles)
