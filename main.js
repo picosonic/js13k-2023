@@ -777,6 +777,31 @@ function checkcollide()
           gs.keys++;
           break;
 
+        // For villagers who can be infected see if we can cure them when we collide
+        case TILE_VILLAGER1:
+        case TILE_VILLAGER2:
+        case TILE_VILLAGER3:
+        case TILE_VILLAGER4:
+          if (((gs.chars[id].health||0)>0) && (gs.chars[id].health<80) && ((gs.chars[id].blood||0)>0))
+          {
+            // Try for an exact match first
+            if (gs.potions.includes(gs.chars[id].blood))
+            {
+              gs.chars[id].health=100; // Put villager back to full health
+              gs.potions.splice(gs.potions.indexOf(gs.chars[id].blood), 1); // Remove matching potion from list
+            }
+            else
+            {
+              // Try white potion
+              if (gs.potions.includes(TILE_POTIONWHITE))
+              {
+                gs.chars[id].health=100; // Put villager back to full health
+                gs.potions.splice(gs.potions.indexOf(TILE_POTIONWHITE), 1); // Remove white potion from list
+              }
+            }
+          }
+          break;
+
         case TILE_POTIONWHITE:
         case TILE_POTIONGREEN:
         case TILE_POTIONRED:
