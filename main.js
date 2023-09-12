@@ -130,13 +130,7 @@ var gs={
   particles:[], // an array of particles for explosion frage, footprint / jump dust
 
   // Game state
-  state:STATEPLAYING, // state machine, 0=playing, 1=complete
-
-  // Timeline for animation
-  timeline:new timelineobj(),
-
-  // Debug flag
-  debug:false
+  state:STATEPLAYING // state machine, 0=playing, 1=complete
 };
 
 var origlevels={};
