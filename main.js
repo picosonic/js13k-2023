@@ -985,7 +985,7 @@ function checkcollide()
               newitem.id=TILE_POTIONWHITE;
   
             // Only spawn coins in the shop
-            if (gs.level==2) spawnitem=TILE_COIN;
+            if (gs.level==2) newitem.id=TILE_COIN;
             
             // If below chest position is solid, spawn above, otherwise spawn below
             if (gs.tiles[((Math.floor(newitem.y/TILESIZE)+1)*gs.width)+Math.floor(newitem.x/TILESIZE)]||0!=0)
