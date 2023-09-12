@@ -245,3 +245,7 @@ Change chests in shop to only spawn coins, otherwise if a potion appears and you
 12th September
 --------------
 When colliding with an infected villager, if we are holding a potion of the same colour or a white potion, then cure tha villager and loose the potion.
+
+Make enemy characters chase you when you are nearby.
+
+Make shy characters run away from you when you are nearby.
