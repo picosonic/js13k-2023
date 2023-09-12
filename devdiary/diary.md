@@ -249,3 +249,5 @@ When colliding with an infected villager, if we are holding a potion of the same
 Make enemy characters chase you when you are nearby.
 
 Make shy characters run away from you when you are nearby.
+
+Draw player health bar when hurt by enemies.
