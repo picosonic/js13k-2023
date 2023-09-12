@@ -241,3 +241,7 @@ Updated wizard's shop to look more like a shop.
 Added logic to shop so that potions in there can't be collected unless sufficient funds are held.
 
 Change chests in shop to only spawn coins, otherwise if a potion appears and you don't have enough money, you can't pick it up!
+
+12th September
+--------------
+When colliding with an infected villager, if we are holding a potion of the same colour or a white potion, then cure tha villager and loose the potion.
