@@ -1,0 +1,16 @@
+{
+  "name": "Princess of Corinium",
+  "description": "You play as a princess saving your village from infectious rats. Collect all treasure and potions and keep villagers safe.",
+  "images" :
+  {
+    "image_large": "big_screenshot.png",
+    "image_thumbnail": "small_screenshot.png"
+  },
+  "categories": ["Desktop", "Mobile"],
+  "user" :
+  {
+    "name": "picosonic",
+    "website": "https://picosonic.github.io/js13k-2023/",
+    "twitter": "femtosonic"
+  }
+}

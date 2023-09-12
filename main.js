@@ -474,7 +474,11 @@ function isgamecompleted()
   var count=0;
 
   for (var level=0; level<levels.length; level++)
-    count+=countcharsonlevel([TILE_CHEST, TILE_COIN, TILE_POTIONBLUE, TILE_POTIONGREEN, TILE_POTIONRED, TILE_POTIONWHITE], level);
+  {
+    // Don't count what's in the shop because some potions in there can't be collected
+    if (gs.level!=2)
+      count+=countcharsonlevel([TILE_CHEST, TILE_COIN, TILE_POTIONBLUE, TILE_POTIONGREEN, TILE_POTIONRED, TILE_POTIONWHITE], level);
+  }
 
   return (count==0);
 }

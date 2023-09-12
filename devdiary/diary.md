@@ -255,3 +255,11 @@ Draw player health bar when hurt by enemies.
 Simplified completion state.
 
 When game in completed state, stop playing, and show completed message.
+
+Coins and potions need to be collected to count as the game being completed.
+
+Changed message to refresh to play again.
+
+Added big and small screenshots.
+
+Getting ready to submit game.
