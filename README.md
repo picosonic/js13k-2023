@@ -50,6 +50,8 @@ Controls are touchscreen where available or use mouse on desktop.
 - [ ] Weather effects
 - [ ] Inventory
 - [ ] Show blocked cursor when over solid tile
+- [ ] Music
+- [ ] Sound FX
 
 # Play online now
 [Click here to play now](https://picosonic.github.io/js13k-2023/)

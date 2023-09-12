@@ -43,7 +43,7 @@ Here is a rough diary of progress as posted on our group chat, [Twitter](https:/
 
 13th August
 -----------
-Looking into the 13th Century on Wikipedia, and having ideas about possible games.
+Looking into the [13th Century on Wikipedia](https://en.wikipedia.org/wiki/13th_century), and having ideas about possible games.
 
 Need to decide some objectives. Think about what might help or hinder the player in their quest.
 
@@ -69,9 +69,11 @@ Discovered a nice tilemap from Kenney [Tiny Town](https://kenney.nl/assets/tiny-
 
 We could make the game point and click rather than a platformer then it could work on mobile/tablet and desktop.
 
+![Tiny tile maps](../assets/tilemap.png?raw=true "Tiny tile maps")
+
 15th August
 -----------
-Cat thought the Kenney tiles looked cute and a little like a Pokemon village. Also suggesting black death as a good 13th century game mechanic with either rat as enemies or play as a little rat that has to infect villagers.
+Cat thought the Kenney tiles looked cute and a little like a [Pokemon village](https://en.wikipedia.org/wiki/Pok%C3%A9mon). Also suggesting black death as a good 13th century game mechanic with either rat as enemies or play as a little rat that has to infect villagers.
 
 Steph liked Cat's suggestion that we could go round trying to cure the villagers and avoid the rats.
 
@@ -85,19 +87,19 @@ I think the next step is to get rendering the tiles/sprites to canvas, then get 
 -----------
 After a couple of us had some holiday away from coding, I'm feeling quite far behind in terms of progress since no actual new coding has been done to the project.
 
-I added the timeline and pathfinder libraries from my previous JS13k projects as I think they will prove useful. The timeline to schedule events and the pathfinder to make characters move from where they are to where they need to be whilst avoiding map objects.
+I added the [timeline](https://github.com/picosonic/js13k-2022/blob/main/timeline.js) and [pathfinder](https://github.com/picosonic/js13k-2022/blob/main/pathfinder.js) libraries from my previous JS13k projects as I think they will prove useful. The timeline to schedule events and the pathfinder to make characters move from where they are to where they need to be whilst avoiding map objects.
 
 I've thought that the game will work best in landscape, so a task will be to determine device orientation and ask user to rotate if it's in portrait mode.
 
 I reduced the canvas size to make the pixelated characters bigger, and made them appear pixelated and not blurred.
 
-The input handler has been split out into a separate JS lib.
+The input handler has been split out into a [separate JS lib](https://github.com/picosonic/js13k-2023/blob/main/inputs.js).
 
-Tilemap has been added, just to have the image loaded, flipped and rendered in a RAF call.
+Tilemap has been added, just to have the image loaded, flipped and rendered in a [RAF call](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
 
 23rd August
 -----------
-Created and added a small test level, just to get familiar again with Tiled.
+Created and added a [small test level](https://github.com/picosonic/js13k-2023/blob/d1cfa065ba8648106dadb726407a2a3633180f78/assets/level1.tmx), just to get familiar again with Tiled.
 
 Added code to the build/run script to detect changes to the level files and rebuild a levels.js file which is a minified representation of them.
 
@@ -109,9 +111,11 @@ Started work on mouse input, so that upon press, the position is calculated rela
 
 Used pathfinder to determine way from current position to clicked position whilst avoiding solid objects.
 
+![Test level](23-testlevel.png?raw=true "Test level")
+
 24th August
 -----------
-Made the player character follow a path when set, so clicking anywhere on the map will set a target point, generate a path using A star pathfinder algorithm then as part of the frame updates the player will move towards the target.
+Made the player character follow a path when set, so clicking anywhere on the map will set a target point, generate a path using A-star pathfinder algorithm then as part of the frame updates the player will move towards the target.
 
 Combined tile maps for dungeon and town, need to optimise them and pick out just the tiles we actually need, to save space and improve colour map in lowest colours.
 
@@ -131,7 +135,7 @@ Added a mouse cursor when over the game world canvas. Then spent ages stopping i
 
 Created some issues on github which would be suitable for a good first issue for Steph and Cat to look at.
 
-Also tested the Google closure output to make sure it works.
+Also tested the [Google closure](https://developers.google.com/closure) output to make sure it works.
 
 The current used space out of the 13kb is 90% - most of this is taken up with the huge spritesheet. So the next major task will be to cull it down to size by deciding what will actually be used in the game. This needs to be done before the maps are made otherwise the ids will all change.
 
@@ -194,6 +198,8 @@ Added logic for ladders/stairs.
 
 Added stausbar which will start off showing coins collected.
 
+![Room name and status](5-room-status.png?raw=true "Room name and status")
+
 6th September
 -------------
 Added stuff to Wizard's attic.
@@ -225,6 +231,8 @@ Map updates. Added two levels for inside church. Added a hero's house.
 Allow potions to be collected, then show which potions have been collected and how many of each.
 
 When trying to enter a locked door without a key, pop up a message telling the player to find a key.
+
+![Locked door](10-locked-door.png?raw=true "Locked door")
 
 11th September
 --------------
