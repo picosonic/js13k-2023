@@ -8,11 +8,8 @@ const TILESPERROW=12;
 const BGCOLOUR="#80c768";
 const BGCOLOURROOM="#8d9bb4";
 
-const STATEINTRO=0;
-const STATEMENU=1;
-const STATEPLAYING=2;
-const STATENEWLEVEL=3;
-const STATECOMPLETE=4;
+const STATEPLAYING=0;
+const STATECOMPLETE=1;
 
 // Tile ids
 const TILE_MUSROOM=29;
@@ -133,7 +130,7 @@ var gs={
   particles:[], // an array of particles for explosion frage, footprint / jump dust
 
   // Game state
-  state:STATEPLAYING, // state machine, 0=intro, 1=menu, 2=playing, 3=complete
+  state:STATEPLAYING, // state machine, 0=playing, 1=complete
 
   // Timeline for animation
   timeline:new timelineobj(),
@@ -1317,6 +1314,10 @@ function update()
 
   // Check for player collision
   checkcollide();
+
+  // Check for game being completed
+  if (isgamecompleted())
+    gs.state=STATECOMPLETE; // Stop playing
 }
 
 function rafcallback(timestamp)
@@ -1339,6 +1340,12 @@ function rafcallback(timestamp)
     }
 
     redraw();
+
+    // If we're done then draw congrats message
+    if (gs.state==STATECOMPLETE)
+    {
+      // TODO
+    }
 
     // If the update took us out of play state then stop now
     if (gs.state!=STATEPLAYING)

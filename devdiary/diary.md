@@ -251,3 +251,5 @@ Make enemy characters chase you when you are nearby.
 Make shy characters run away from you when you are nearby.
 
 Draw player health bar when hurt by enemies.
+
+Simplified completion state.

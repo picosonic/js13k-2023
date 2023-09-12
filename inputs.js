@@ -15,6 +15,12 @@ function settarget(e)
 
   if (e.button!=0) return;
 
+  // If game was completed, start again from scratch
+  if (gs.state==STATECOMPLETE)
+  {
+    // TODO
+  }
+
   var myx=Math.floor((e.clientX-e.target.getBoundingClientRect().left)/gs.scale)+gs.xoffset;
   var myy=Math.floor((e.clientY-e.target.getBoundingClientRect().top)/gs.scale)+gs.yoffset;
   //console.log(myx+", "+myy);
