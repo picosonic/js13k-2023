@@ -1174,6 +1174,39 @@ function updatecharAI()
           );
         break;
 
+      // Characters who chase us when we are nearby
+      case TILE_CYCLOPS:
+      case TILE_BAT:
+      case TILE_GHOST:
+      case TILE_SPIDER:
+        if (calcHypotenuse(Math.abs(gs.x-gs.chars[id].x), Math.abs(gs.y-gs.chars[id].y))<(5*TILESIZE))
+        {
+          gs.chars[id].path=pathfinder(
+            (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
+            ,
+            (Math.floor(gs.y/TILESIZE)*gs.width)+Math.floor(gs.x/TILESIZE)
+            );
+        }
+        break;
+
+      // Characters who run away from us when we are nearby
+      case TILE_CRAB:
+      case TILE_MONK:
+      case TILE_WOODMAN:
+        if (calcHypotenuse(Math.abs(gs.x-gs.chars[id].x), Math.abs(gs.y-gs.chars[id].y))<(5*TILESIZE))
+        {
+          // Pick somewhere random to run away to
+          nx=Math.floor(rng()*gs.width*TILESIZE);
+          ny=Math.floor(rng()*gs.height*TILESIZE);
+
+          gs.chars[id].path=pathfinder(
+            (Math.floor(gs.chars[id].y/TILESIZE)*gs.width)+Math.floor(gs.chars[id].x/TILESIZE)
+            ,
+            (Math.floor(ny/TILESIZE)*gs.width)+Math.floor(nx/TILESIZE)
+            );
+        }
+        break;
+
       case TILE_VILLAGER1: // Beekeeper
       case TILE_VILLAGER2:
       case TILE_VILLAGER3:
