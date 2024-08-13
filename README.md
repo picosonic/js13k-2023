@@ -1,6 +1,6 @@
 # js13k-2023
 
-JS13KGames entry for 2023, them is "**13th Century**".
+JS13KGames entry for 2023, theme is "**13th Century**".
 
 ## Princess of Corinium
 You play as a princess who needs to cure the plagued villagers from the rats of Corinium.
